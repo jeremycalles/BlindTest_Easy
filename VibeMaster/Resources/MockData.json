@@ -1,0 +1,25 @@
+{
+  "data": [
+    {
+      "id": 3135556,
+      "title": "Harder Better Faster Stronger",
+      "preview": "https://cdns-preview-d.dzcdn.net/stream/c-deda7fa931cdd64e8c3c9b0d65449930-8.mp3",
+      "artist": { "name": "Daft Punk", "picture_medium": "https://e-cdns-images.dzcdn.net/images/artist/22dd0b9e16132d1b2b502e1b40f2f993/56x56-000000-80-0-0.jpg" },
+      "album": { "cover_medium": "https://e-cdns-images.dzcdn.net/images/cover/2e018122cb56986277102d2041a592c8/250x250-000000-80-0-0.jpg" }
+    },
+    {
+      "id": 3135557,
+      "title": "Around the World",
+      "preview": "https://cdns-preview-d.dzcdn.net/stream/c-e0c4d974d6a2b1b2e3f4a5b6c7d8e9f0-8.mp3",
+      "artist": { "name": "Daft Punk", "picture_medium": "https://e-cdns-images.dzcdn.net/images/artist/22dd0b9e16132d1b2b502e1b40f2f993/56x56-000000-80-0-0.jpg" },
+      "album": { "cover_medium": "https://e-cdns-images.dzcdn.net/images/cover/2e018122cb56986277102d2041a592c8/250x250-000000-80-0-0.jpg" }
+    },
+    {
+      "id": 3135558,
+      "title": "One More Time",
+      "preview": "https://cdns-preview-d.dzcdn.net/stream/c-a1b2c3d4e5f6071829304a5b6c7d8e9f-8.mp3",
+      "artist": { "name": "Daft Punk", "picture_medium": "https://e-cdns-images.dzcdn.net/images/artist/22dd0b9e16132d1b2b502e1b40f2f993/56x56-000000-80-0-0.jpg" },
+      "album": { "cover_medium": "https://e-cdns-images.dzcdn.net/images/cover/2e018122cb56986277102d2041a592c8/250x250-000000-80-0-0.jpg" }
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+//
+//  SplashView.swift
+//  VibeMaster
+//
+
+import SwiftUI
+
+struct SplashView: View {
+    @Binding var path: [AppDestination]
+
+    var body: some View {
+        VStack(spacing: 32) {
+            Spacer()
+            VStack(spacing: 16) {
+                Image(systemName: "music.note.list")
+                    .font(.system(size: 72))
+                    .symbolRenderingMode(.hierarchical)
+                Text("VibeMaster")
+                    .font(.largeTitle)
+                    .bold()
+            }
+            .foregroundStyle(.white)
+            Spacer()
+            Button("Commencer la soirée") {
+                HapticManager.medium()
+                path.append(.dashboard)
+            }
+            .font(.headline.weight(.semibold))
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .padding(.horizontal, 32)
+            .buttonStyle(.borderedProminent)
+            .tint(.white)
+            .foregroundStyle(.indigo)
+            .padding(.bottom, 48)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(
+            LinearGradient(colors: [.indigo, .purple], startPoint: .top, endPoint: .bottom)
+        )
+    }
+}

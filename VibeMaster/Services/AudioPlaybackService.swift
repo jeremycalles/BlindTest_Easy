@@ -1,0 +1,54 @@
+//
+//  AudioPlaybackService.swift
+//  VibeMaster
+//
+
+import Foundation
+import AVFoundation
+
+final class AudioPlaybackService {
+    static let shared = AudioPlaybackService()
+    private var player: AVPlayer?
+
+    static func configureSession() {
+        let session = AVAudioSession.sharedInstance()
+        try? session.setCategory(.playback, mode: .default)
+        try? session.setActive(true)
+    }
+
+    func load(url: String) {
+        stop()
+        guard let u = URL(string: url) else { return }
+        player = AVPlayer(url: u)
+        player?.volume = 1.0
+    }
+
+    func play() {
+        player?.play()
+    }
+
+    func pause() {
+        player?.pause()
+    }
+
+    func stop() {
+        player?.pause()
+        player = nil
+    }
+
+    func duckAndFadeOut(duration: TimeInterval = 2.5, completion: @escaping () -> Void) {
+        let steps = 20
+        let stepDuration = duration / Double(steps)
+        var step = 0
+        let timer = Timer.scheduledTimer(withTimeInterval: stepDuration, repeats: true) { [weak self] t in
+            step += 1
+            let progress = Float(step) / Float(steps)
+            self?.player?.volume = 1.0 * (1 - progress)
+            if step >= steps {
+                t.invalidate()
+                completion()
+            }
+        }
+        RunLoop.main.add(timer, forMode: .common)
+    }
+}
