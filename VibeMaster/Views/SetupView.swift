@@ -141,9 +141,10 @@ struct SetupView: View {
         }
         guard names.count >= 2, !tracks.isEmpty else { return }
         LastGameState.savePlayerNames(names)
+        let shuffledTracks = tracks.shuffled()
         let seconds = Int(timerSeconds)
         let clamped = min(30, max(5, seconds))
-        let config = GameConfig(tracks: tracks, playerNames: names, timerSeconds: clamped, mcPlaysMode: mcPlaysMode)
+        let config = GameConfig(tracks: shuffledTracks, playerNames: names, timerSeconds: clamped, mcPlaysMode: mcPlaysMode)
         path.append(.game(config))
     }
 }

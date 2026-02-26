@@ -26,6 +26,21 @@ struct DashboardView: View {
     var body: some View {
         List {
             if !isSearching {
+                Section("Mes Blind Tests") {
+                    if favoritePlaylists.isEmpty {
+                        Text("Ajoutez des playlists en favori pour les retrouver ici.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ForEach(favoritePlaylists, id: \.id) { item in
+                            PlaylistRowView(item: item, isFavorite: true, onAdd: {}, onRemove: {
+                                FavoritesManager.shared.remove(id: item.id)
+                                HapticManager.light()
+                                loadFavorites()
+                            }, onTap: { selectPlaylist(id: item.id) })
+                        }
+                    }
+                }
                 Section("Top playlists") {
                     if isLoadingChart {
                         ProgressView()
@@ -48,21 +63,7 @@ struct DashboardView: View {
                         }
                     }
                 }
-                Section("Mes Blind Tests") {
-                    if favoritePlaylists.isEmpty {
-                        Text("Ajoutez des playlists en favori pour les retrouver ici.")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        ForEach(favoritePlaylists, id: \.id) { item in
-                            PlaylistRowView(item: item, isFavorite: true, onAdd: {}, onRemove: {
-                                FavoritesManager.shared.remove(id: item.id)
-                                HapticManager.light()
-                                loadFavorites()
-                            }, onTap: { selectPlaylist(id: item.id) })
-                        }
-                    }
-                }
+                
             } else {
                 Section("Résultats") {
                     if isLoadingSearch {

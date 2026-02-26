@@ -17,21 +17,40 @@ struct GameView: View {
         _engine = StateObject(wrappedValue: GameEngine(config))
     }
 
+    // Manual position for track header — change trackHeaderTop / trackHeaderLeading to move it.
+    // For center: use .frame(maxWidth: .infinity) on trackHeader and ZStack(alignment: .top).
+    private let trackHeaderTop: CGFloat = -90
+    private let trackHeaderLeading: CGFloat = 70
+    /// Fixed height for the track card so its size stays the same in all states.
+    private let trackCardHeight: CGFloat = 56
+    /// Y position of the track card (offset from top of game content). Change to move the card vertically.
+    private let trackCardTop: CGFloat = -50
+    /// Minimum vertical gap between the track card and the player grid. Keeps the layout balanced.
+    private let trackCardToGridGap: CGFloat = 12
+
     var body: some View {
-        ZStack {
+        ZStack(alignment: .topLeading) {
             backgroundLayer
-            VStack(spacing: 12) {
-                if let track = engine.currentTrack {
-                    trackCard(track)
-                }
-                trackHeader
+            VStack(alignment: .leading, spacing: 12) {
+                Color.clear.frame(height: max(0, trackCardTop + trackCardHeight) + trackCardToGridGap)
                 playerGrid
+                Spacer(minLength: 0)
                 timerStrip
                 controlBar
             }
-            .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .padding(.horizontal)
+            .padding(.top, 8)
+            .padding(.bottom)
+            trackHeader
+                .padding(.top, trackHeaderTop)
+                .padding(.leading, trackHeaderLeading)
+            if let track = engine.currentTrack {
+                trackCard(track)
+                    .padding(.top, trackCardTop)
+            }
         }
-        .safeAreaInset(edge: .top, spacing: 8) { Color.clear.frame(height: 8) }
+        .safeAreaInset(edge: .top, spacing: 0) { Color.clear.frame(height: 0) }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             Color.clear.frame(height: max(14, 0))
         }
@@ -65,12 +84,12 @@ struct GameView: View {
         Group {
             if let track = engine.currentTrack, let url = URL(string: track.album.cover_medium) {
                 AsyncImage(url: url) { image in image.resizable() }
-                    placeholder: { Color.indigo.opacity(0.6) }
+                    placeholder: { Color.indigo.opacity(0.8) }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .blur(radius: 80)
                     .ignoresSafeArea()
             } else {
-                Color.indigo.opacity(0.6)
+                Color.indigo.opacity(0.8)
                     .ignoresSafeArea()
             }
         }
@@ -105,14 +124,17 @@ struct GameView: View {
             }
             Spacer()
         }
+        .frame(height: trackCardHeight)
         .padding(12)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
         .overlay {
             if config.mcPlaysMode && !engine.isRevealed {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(.ultraThickMaterial)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
     private var playerGrid: some View {
@@ -123,12 +145,12 @@ struct GameView: View {
                     name: name,
                     score: engine.scores[name] ?? 0,
                     color: playerColor(for: name),
-                    onTap: { engine.addPoint(playerName: name); HapticManager.light() },
-                    onDoubleTap: { engine.addPoints(2, playerName: name); HapticManager.medium() },
+                    onTap: { engine.addPoint(playerName: name); HapticManager.medium() },
+                    onDoubleTap: { engine.addPoint(playerName: name); HapticManager.medium() },
                     onLongPress: {
                         if (engine.scores[name] ?? 0) > 0 {
                             engine.addPoints(-1, playerName: name)
-                            HapticManager.light()
+                            HapticManager.medium()
                         }
                     }
                 )
@@ -250,7 +272,7 @@ struct PlayerTile: View {
             .frame(minHeight: 140)
             .padding(.vertical, 12)
             .frame(maxWidth: .infinity)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+            .background(.thickMaterial, in: RoundedRectangle(cornerRadius: 12))
         }
         .buttonStyle(.plain)
         .contextMenu {
