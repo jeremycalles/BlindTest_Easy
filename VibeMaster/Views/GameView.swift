@@ -107,6 +107,12 @@ struct GameView: View {
         }
         .padding(12)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+        .overlay {
+            if config.mcPlaysMode && !engine.isRevealed {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(.ultraThickMaterial)
+            }
+        }
     }
 
     private var playerGrid: some View {
@@ -155,8 +161,7 @@ struct GameView: View {
     }
 
     private var controlBar: some View {
-        HStack {
-            Spacer()
+        ZStack {
             Button {
                 engine.togglePlayPause()
                 HapticManager.medium()
@@ -165,7 +170,8 @@ struct GameView: View {
                     .font(.system(size: 60))
                     .foregroundStyle(Color(red: 1, green: 0.4, blue: 0.2))
             }
-            Spacer()
+            .frame(maxWidth: .infinity)
+
             if engine.roundEnded {
                 if engine.currentTrackIndex + 1 >= config.tracks.count {
                     Button("Podium") {
@@ -175,6 +181,7 @@ struct GameView: View {
                     .fontWeight(.semibold)
                     .frame(width: 90, height: 44)
                     .background(.ultraThinMaterial, in: Capsule())
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                 } else {
                     Button("Suivant") {
                         engine.nextTrack()
@@ -183,9 +190,8 @@ struct GameView: View {
                     .fontWeight(.semibold)
                     .frame(width: 90, height: 44)
                     .background(.ultraThinMaterial, in: Capsule())
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                 }
-            } else {
-                Color.clear.frame(width: 90, height: 44)
             }
         }
     }
@@ -246,7 +252,12 @@ struct PlayerTile: View {
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
         }
         .buttonStyle(.plain)
-        .onLongPressGesture(minimumDuration: 0.5, perform: onLongPress)
+        .contextMenu {
+            Button("Diminuer le score", role: .none) {
+                onLongPress()
+            }
+            .disabled(score <= 0)
+        }
         .simultaneousGesture(
             TapGesture(count: 2).onEnded { _ in onDoubleTap() }
         )

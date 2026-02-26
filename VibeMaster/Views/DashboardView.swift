@@ -26,22 +26,6 @@ struct DashboardView: View {
     var body: some View {
         List {
             if !isSearching {
-                Section("Démarrer") {
-                    Button {
-                        Task {
-                            let tracks = await MockPlaylistService.loadTracks()
-                            await MainActor.run {
-                                setupItem = SetupItem(tracks: tracks)
-                            }
-                        }
-                    } label: {
-                        Label("Blind Test rapide", systemImage: "play.circle.fill")
-                            .font(.title2)
-                        Text("3 titres (données de démo)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
                 Section("Top playlists") {
                     if isLoadingChart {
                         ProgressView()

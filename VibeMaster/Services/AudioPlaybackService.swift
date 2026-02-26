@@ -9,6 +9,7 @@ import AVFoundation
 final class AudioPlaybackService {
     static let shared = AudioPlaybackService()
     private var player: AVPlayer?
+    private var fadeTimer: Timer?
 
     static func configureSession() {
         let session = AVAudioSession.sharedInstance()
@@ -32,11 +33,15 @@ final class AudioPlaybackService {
     }
 
     func stop() {
+        fadeTimer?.invalidate()
+        fadeTimer = nil
         player?.pause()
         player = nil
     }
 
-    func duckAndFadeOut(duration: TimeInterval = 2.5, completion: @escaping () -> Void) {
+    func duckAndFadeOut(duration: TimeInterval = 20, completion: @escaping () -> Void) {
+        fadeTimer?.invalidate()
+        fadeTimer = nil
         let steps = 20
         let stepDuration = duration / Double(steps)
         var step = 0
@@ -46,9 +51,11 @@ final class AudioPlaybackService {
             self?.player?.volume = 1.0 * (1 - progress)
             if step >= steps {
                 t.invalidate()
+                self?.fadeTimer = nil
                 completion()
             }
         }
+        fadeTimer = timer
         RunLoop.main.add(timer, forMode: .common)
     }
 }

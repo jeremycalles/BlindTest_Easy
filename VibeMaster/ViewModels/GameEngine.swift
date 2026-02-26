@@ -17,6 +17,7 @@ final class GameEngine: ObservableObject {
     @Published private(set) var currentTrackIndex = 0
     @Published private(set) var scores: [String: Int] = [:]
     @Published private(set) var isPlaying = false
+    @Published private(set) var isRevealed = false
     @Published private(set) var timeRemaining = 0
     @Published private(set) var roundEnded = false
 
@@ -37,6 +38,7 @@ final class GameEngine: ObservableObject {
         guard !track.preview.isEmpty else { return }
         audio.load(url: track.preview)
         audio.play()
+        isRevealed = false
         roundEnded = false
         timeRemaining = config.timerSeconds
         isPlaying = true
@@ -71,8 +73,9 @@ final class GameEngine: ObservableObject {
 
     func reveal() {
         timerTask?.cancel()
+        isRevealed = true
         roundEnded = true
-        audio.duckAndFadeOut(duration: 2.5) { }
+        audio.duckAndFadeOut(duration: 20) { }
     }
 
     func addPoint(playerName: String) {
