@@ -31,14 +31,19 @@ struct GameView: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             backgroundLayer
-            VStack(alignment: .leading, spacing: 12) {
-                Color.clear.frame(height: max(0, trackCardTop + trackCardHeight) + trackCardToGridGap)
-                playerGrid
-                Spacer(minLength: 0)
-                timerStrip
-                controlBar
+            GeometryReader { geo in
+                let topReserved = max(0, trackCardTop + trackCardHeight) + trackCardToGridGap
+                let bottomReserved: CGFloat = 110
+                let gridHeight = max(60, geo.size.height - topReserved - bottomReserved - 12 * 2)
+                VStack(alignment: .leading, spacing: 12) {
+                    Color.clear.frame(height: topReserved)
+                    playerGrid(availableHeight: gridHeight)
+                        .frame(height: gridHeight)
+                    timerStrip
+                    controlBar
+                }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.horizontal)
             .padding(.top, 8)
             .padding(.bottom)
@@ -137,14 +142,18 @@ struct GameView: View {
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
-    private var playerGrid: some View {
+    private func playerGrid(availableHeight: CGFloat) -> some View {
         let columns = [GridItem(.flexible()), GridItem(.flexible())]
-        return LazyVGrid(columns: columns, spacing: 12) {
+        let rowCount = (config.playerNames.count + 1) / 2
+        let spacing: CGFloat = 12
+        let rowHeight = rowCount > 0 ? (availableHeight - spacing * CGFloat(rowCount - 1)) / CGFloat(rowCount) : 80
+        return LazyVGrid(columns: columns, spacing: spacing) {
             ForEach(config.playerNames, id: \.self) { name in
                 PlayerTile(
                     name: name,
                     score: engine.scores[name] ?? 0,
                     color: playerColor(for: name),
+                    rowHeight: rowHeight,
                     onTap: { engine.addPoint(playerName: name); HapticManager.medium() },
                     onDoubleTap: { engine.addPoint(playerName: name); HapticManager.medium() },
                     onLongPress: {
@@ -156,7 +165,6 @@ struct GameView: View {
                 )
             }
         }
-        .frame(minHeight: 164 * 2 + 12)
     }
 
     private var timerStrip: some View {
@@ -236,22 +244,29 @@ struct PlayerTile: View {
     let name: String
     let score: Int
     let color: Color
+    var rowHeight: CGFloat = 140
     let onTap: () -> Void
     let onDoubleTap: () -> Void
     let onLongPress: () -> Void
 
+    private var isCompact: Bool { rowHeight < 120 }
+    private var circleSize: CGFloat { isCompact ? 32 : 50 }
+    private var initialFontSize: CGFloat { isCompact ? 14 : 20 }
+    private var scoreFontSize: CGFloat { isCompact ? 18 : 26 }
+    private var verticalPadding: CGFloat { isCompact ? 6 : 12 }
+
     var body: some View {
         Button(action: onTap) {
-            VStack(spacing: 8) {
+            VStack(spacing: isCompact ? 4 : 8) {
                 ZStack {
                     Circle()
                         .fill(color.opacity(0.15))
-                        .frame(width: 50, height: 50)
+                        .frame(width: circleSize, height: circleSize)
                     Circle()
-                        .stroke(color, lineWidth: 2.5)
-                        .frame(width: 50, height: 50)
+                        .stroke(color, lineWidth: isCompact ? 2 : 2.5)
+                        .frame(width: circleSize, height: circleSize)
                     Text(String(name.prefix(1)).uppercased())
-                        .font(.system(size: 20, weight: .bold))
+                        .font(.system(size: initialFontSize, weight: .bold))
                         .foregroundStyle(color)
                 }
                 Text(name)
@@ -261,7 +276,7 @@ struct PlayerTile: View {
                     .minimumScaleFactor(0.7)
                     .foregroundStyle(color)
                 Text("\(score)")
-                    .font(.system(size: 26, weight: .bold))
+                    .font(.system(size: scoreFontSize, weight: .bold))
                     .fontDesign(.rounded)
                     .foregroundStyle(color)
                 Text("pts")
@@ -269,8 +284,8 @@ struct PlayerTile: View {
                     .fontWeight(.medium)
                     .foregroundStyle(color.opacity(0.85))
             }
-            .frame(minHeight: 140)
-            .padding(.vertical, 12)
+            .frame(minHeight: 0)
+            .padding(.vertical, verticalPadding)
             .frame(maxWidth: .infinity)
             .background(.thickMaterial, in: RoundedRectangle(cornerRadius: 12))
         }
