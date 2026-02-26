@@ -21,10 +21,10 @@ struct GameView: View {
         ZStack {
             backgroundLayer
             VStack(spacing: 12) {
-                trackHeader
                 if let track = engine.currentTrack {
                     trackCard(track)
                 }
+                trackHeader
                 playerGrid
                 timerStrip
                 controlBar
@@ -234,17 +234,18 @@ struct PlayerTile: View {
                 }
                 Text(name)
                     .font(.caption2)
-                    .fontWeight(.medium)
+                    .fontWeight(.semibold)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(color)
                 Text("\(score)")
                     .font(.system(size: 26, weight: .bold))
                     .fontDesign(.rounded)
                     .foregroundStyle(color)
                 Text("pts")
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .fontWeight(.medium)
+                    .foregroundStyle(color.opacity(0.85))
             }
             .frame(minHeight: 140)
             .padding(.vertical, 12)

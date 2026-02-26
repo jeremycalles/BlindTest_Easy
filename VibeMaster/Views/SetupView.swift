@@ -64,6 +64,12 @@ struct SetupView: View {
             }
         }
         .onAppear {
+            let lastNames = LastGameState.loadPlayerNames()
+            if lastNames.count >= 2 {
+                playerNames = lastNames
+            } else if !lastNames.isEmpty {
+                playerNames = lastNames + [""]
+            }
             if let initial = initialTracks, !initial.isEmpty {
                 tracks = initial
                 isLoading = false
@@ -134,6 +140,7 @@ struct SetupView: View {
             return t.isEmpty ? nil : t
         }
         guard names.count >= 2, !tracks.isEmpty else { return }
+        LastGameState.savePlayerNames(names)
         let seconds = Int(timerSeconds)
         let clamped = min(30, max(5, seconds))
         let config = GameConfig(tracks: tracks, playerNames: names, timerSeconds: clamped, mcPlaysMode: mcPlaysMode)
