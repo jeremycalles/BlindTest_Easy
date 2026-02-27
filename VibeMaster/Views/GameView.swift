@@ -154,6 +154,7 @@ struct GameView: View {
                     name: name,
                     score: engine.scores[name] ?? 0,
                     color: playerColor(for: name),
+                    iconName: playerIcon(for: name),
                     rowHeight: rowHeight,
                     onTap: { engine.addPoint(playerName: name); HapticManager.medium() },
                     onDoubleTap: { engine.addPoint(playerName: name); HapticManager.medium() },
@@ -257,15 +258,28 @@ struct GameView: View {
 
     private func playerColor(for name: String) -> Color {
         let colors: [Color] = [
-            Color(red: 1, green: 0.4, blue: 0.4),
-            Color(red: 0.25, green: 0.8, blue: 0.8),
-            Color(red: 0.53, green: 0.81, blue: 0.98),
-            Color(red: 0.7, green: 0.65, blue: 0.9),
-            Color(red: 1, green: 0.84, blue: 0),
-            Color(red: 0.6, green: 0.98, blue: 0.6)
+            Color(red: 0.2, green: 0.6, blue: 1.0),   // Blue (Flame)
+            Color(red: 1.0, green: 0.75, blue: 0.1),  // Yellow (Crown)
+            Color(red: 0.2, green: 0.85, blue: 0.4),  // Green (Heart)
+            Color(red: 1.0, green: 0.3, blue: 0.8),   // Pink (Shield)
+            Color(red: 0.6, green: 0.3, blue: 0.9),   // Purple
+            Color(red: 1.0, green: 0.4, blue: 0.2)    // Orange
         ]
         let idx = config.playerNames.firstIndex(of: name) ?? 0
         return colors[idx % colors.count]
+    }
+    
+    private func playerIcon(for name: String) -> String {
+        let icons = [
+            "flame.fill",
+            "crown.fill",
+            "heart.fill",
+            "shield.fill",
+            "star.fill",
+            "bolt.fill"
+        ]
+        let idx = config.playerNames.firstIndex(of: name) ?? 0
+        return icons[idx % icons.count]
     }
 }
 
@@ -273,52 +287,57 @@ struct PlayerTile: View {
     let name: String
     let score: Int
     let color: Color
+    let iconName: String
     var rowHeight: CGFloat = 140
     let onTap: () -> Void
     let onDoubleTap: () -> Void
     let onLongPress: () -> Void
 
-    private var isCompact: Bool { rowHeight < 120 }
-    private var circleSize: CGFloat { isCompact ? 32 : 50 }
-    private var initialFontSize: CGFloat { isCompact ? 14 : 20 }
-    private var scoreFontSize: CGFloat { isCompact ? 18 : 26 }
-    private var verticalPadding: CGFloat { isCompact ? 6 : 12 }
-
     var body: some View {
         Button(action: onTap) {
-            VStack(spacing: isCompact ? 4 : 8) {
-                ZStack {
-                    Circle()
-                        .fill(color.opacity(0.15))
-                        .frame(width: circleSize, height: circleSize)
-                    Circle()
-                        .stroke(color, lineWidth: isCompact ? 2 : 2.5)
-                        .frame(width: circleSize, height: circleSize)
-                    Text(String(name.prefix(1)).uppercased())
-                        .font(.system(size: initialFontSize, weight: .bold))
-                        .foregroundStyle(color)
+            ZStack {
+                // Background
+                RoundedRectangle(cornerRadius: 24)
+                    .fill(.ultraThinMaterial)
+                    .colorScheme(.dark) // Force dark material look
+                    .opacity(0.6)
+                
+                // Glowing border
+                RoundedRectangle(cornerRadius: 24)
+                    .strokeBorder(color, lineWidth: 3)
+                    .shadow(color: color.opacity(0.8), radius: 8, x: 0, y: 0)
+                
+                VStack(alignment: .leading) {
+                    HStack(alignment: .top) {
+                        Image(systemName: iconName)
+                            .font(.system(size: 28))
+                            .foregroundStyle(color)
+                            .shadow(color: color.opacity(0.8), radius: 6)
+                        
+                        Spacer()
+                        
+                        Text("\(score)")
+                            .font(.system(size: 36, weight: .bold, design: .rounded))
+                            .foregroundStyle(.white)
+                            .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
+                    }
+                    
+                    Spacer()
+                    
+                    Text(name)
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.white)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                        .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
                 }
-                Text(name)
-                    .font(.caption2)
-                    .fontWeight(.semibold)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                    .foregroundStyle(color)
-                Text("\(score)")
-                    .font(.system(size: scoreFontSize, weight: .bold))
-                    .fontDesign(.rounded)
-                    .foregroundStyle(color)
-                Text("pts")
-                    .font(.caption2)
-                    .fontWeight(.medium)
-                    .foregroundStyle(color.opacity(0.85))
+                .padding(16)
             }
-            .frame(minHeight: 0)
-            .padding(.vertical, verticalPadding)
-            .frame(maxWidth: .infinity)
-            .background(.thickMaterial, in: RoundedRectangle(cornerRadius: 12))
+            .clipShape(RoundedRectangle(cornerRadius: 24))
+            .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 4)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(ScaleButtonStyle())
         .contextMenu {
             Button("Diminuer le score", role: .none) {
                 onLongPress()
@@ -328,5 +347,13 @@ struct PlayerTile: View {
         .simultaneousGesture(
             TapGesture(count: 2).onEnded { _ in onDoubleTap() }
         )
+    }
+}
+
+struct ScaleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.96 : 1)
+            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed)
     }
 }
