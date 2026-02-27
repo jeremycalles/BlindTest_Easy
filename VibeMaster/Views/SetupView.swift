@@ -12,6 +12,7 @@ struct SetupView: View {
 
     @State private var playerNames = ["", ""]
     @State private var timerSeconds: Double = 15
+    @State private var numberOfSongs: Int = 1
     @State private var mcPlaysMode = false
     @State private var tracks: [Track] = []
     @State private var isLoading = true
@@ -41,6 +42,7 @@ struct SetupView: View {
                             let loaded = await MockPlaylistService.loadTracks()
                             await MainActor.run {
                                 tracks = loaded
+                                numberOfSongs = loaded.isEmpty ? 1 : loaded.count
                                 isLoading = false
                                 if loaded.isEmpty { loadError = "Aucune piste" }
                             }
@@ -72,12 +74,14 @@ struct SetupView: View {
             }
             if let initial = initialTracks, !initial.isEmpty {
                 tracks = initial
+                numberOfSongs = initial.count
                 isLoading = false
             } else {
                 Task {
                     let loaded = await MockPlaylistService.loadTracks()
                     await MainActor.run {
                         tracks = loaded
+                        numberOfSongs = loaded.isEmpty ? 1 : loaded.count
                         isLoading = false
                         if loaded.isEmpty { loadError = "Aucune piste" }
                     }
@@ -116,6 +120,22 @@ struct SetupView: View {
                     Slider(value: $timerSeconds, in: 5...30, step: 1)
                 }
             }
+            if !tracks.isEmpty {
+                Section("Nombre de pistes") {
+                    HStack {
+                        Text("\(numberOfSongs) / \(tracks.count)")
+                            .fontWeight(.medium)
+                        Slider(
+                            value: Binding(
+                                get: { Double(numberOfSongs) },
+                                set: { numberOfSongs = Int($0.rounded()) }
+                            ),
+                            in: 1...Double(max(1, tracks.count)),
+                            step: 1
+                        )
+                    }
+                }
+            }
             Section("Mode MC") {
                 Toggle("Le MC joue", isOn: $mcPlaysMode)
             }
@@ -141,10 +161,12 @@ struct SetupView: View {
         }
         guard names.count >= 2, !tracks.isEmpty else { return }
         LastGameState.savePlayerNames(names)
+        let count = min(max(1, numberOfSongs), tracks.count)
         let shuffledTracks = tracks.shuffled()
+        let configTracks = Array(shuffledTracks.prefix(count))
         let seconds = Int(timerSeconds)
         let clamped = min(30, max(5, seconds))
-        let config = GameConfig(tracks: shuffledTracks, playerNames: names, timerSeconds: clamped, mcPlaysMode: mcPlaysMode)
+        let config = GameConfig(tracks: configTracks, playerNames: names, timerSeconds: clamped, mcPlaysMode: mcPlaysMode)
         path.append(.game(config))
     }
 }

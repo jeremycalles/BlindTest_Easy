@@ -145,7 +145,7 @@ struct DashboardView: View {
         do {
             let list = try await DeezerAPIService.shared.searchPlaylists(query: searchText.trimmingCharacters(in: .whitespacesAndNewlines))
             await MainActor.run {
-                searchResults = list
+                searchResults = list.filter { ($0.nb_tracks ?? 0) > 0 }
                 isLoadingSearch = false
             }
         } catch {
