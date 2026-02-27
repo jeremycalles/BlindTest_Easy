@@ -184,6 +184,13 @@ struct GameView: View {
         .scaleEffect(timerStripBaseScale * timerBounceScale)
         .animation(.easeInOut(duration: 0.3), value: engine.timeRemaining)
         .padding(.vertical, 4)
+        .onChange(of: engine.timeRemaining) { _, remaining in
+            guard !engine.roundEnded, (1...3).contains(remaining) else { return }
+            withAnimation(.spring(response: 0.2, dampingFraction: 0.6)) { timerBounceScale = 2.15 }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { timerBounceScale = 1.0 }
+            }
+        }
         .onChange(of: engine.roundEnded) { _, ended in
             if ended {
                 withAnimation(.spring(response: 0.2, dampingFraction: 0.5)) { timerBounceScale = 1.35 }
