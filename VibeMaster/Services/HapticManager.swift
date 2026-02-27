@@ -15,7 +15,7 @@ enum HapticManager {
     }
     /// Plays timer-end sound (system 1075) and medium haptic. Call when the round timer reaches zero.
     static func timerEnd() {
-        AudioServicesPlaySystemSound(1075)
+        AudioServicesPlaySystemSound(1104)
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
     }
 }

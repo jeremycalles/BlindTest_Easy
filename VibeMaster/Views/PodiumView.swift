@@ -67,16 +67,6 @@ struct PodiumView: View {
 
                     // Action buttons
                     VStack(spacing: 12) {
-                        Button("Rejouer") {
-                            HapticManager.medium()
-                            path.append(.game(results.config))
-                        }
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
-
                         Button("Retour à l'accueil") {
                             HapticManager.medium()
                             path = [.dashboard]
