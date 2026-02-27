@@ -10,6 +10,7 @@ struct GameView: View {
     @Binding var path: [AppDestination]
     @StateObject private var engine: GameEngine
     @State private var showStopGameConfirmation = false
+    @State private var timerBounceScale: CGFloat = 1.0
 
     init(config: GameConfig, path: Binding<[AppDestination]>) {
         self.config = config
@@ -167,27 +168,51 @@ struct GameView: View {
         }
     }
 
+    private var timerStripBaseScale: CGFloat {
+        if engine.roundEnded { return 1.2 }
+        let remaining = CGFloat(engine.timeRemaining)
+        let factor = max(0, 3 - remaining) / 3 * 0.4
+        return 1.0 + factor
+    }
+
     private var timerStrip: some View {
         HStack {
             Rectangle().fill(.white.opacity(0.25)).frame(height: 1)
-            if engine.roundEnded {
-                Text("TEMPS ÉCOULÉ")
-                    .font(.caption2)
-                    .fontWeight(.semibold)
-                    .tracking(1.5)
-                    .foregroundStyle(Color(red: 1, green: 0.4, blue: 0.4))
-            } else {
-                let m = engine.timeRemaining / 60
-                let s = engine.timeRemaining % 60
-                Text(String(format: "%d:%02d", m, s))
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .monospacedDigit()
-                    .foregroundStyle(.secondary)
-            }
+            timerStripContent
             Rectangle().fill(.white.opacity(0.25)).frame(height: 1)
         }
+        .scaleEffect(timerStripBaseScale * timerBounceScale)
+        .animation(.easeInOut(duration: 0.3), value: engine.timeRemaining)
         .padding(.vertical, 4)
+        .onChange(of: engine.roundEnded) { _, ended in
+            if ended {
+                withAnimation(.spring(response: 0.2, dampingFraction: 0.5)) { timerBounceScale = 1.35 }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    withAnimation(.spring(response: 0.45, dampingFraction: 0.65)) { timerBounceScale = 1.0 }
+                }
+            } else {
+                timerBounceScale = 1.0
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var timerStripContent: some View {
+        if engine.roundEnded {
+            Text("TEMPS ÉCOULÉ")
+                .font(.caption2)
+                .fontWeight(.semibold)
+                .tracking(1.5)
+                .foregroundStyle(Color(red: 1, green: 0.4, blue: 0.4))
+        } else {
+            let m = engine.timeRemaining / 60
+            let s = engine.timeRemaining % 60
+            Text(String(format: "%d:%02d", m, s))
+                .font(.caption)
+                .fontWeight(.semibold)
+                .monospacedDigit()
+                .foregroundStyle(.secondary)
+        }
     }
 
     private var controlBar: some View {

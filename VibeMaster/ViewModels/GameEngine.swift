@@ -72,6 +72,7 @@ final class GameEngine: ObservableObject {
     }
 
     func reveal() {
+        HapticManager.timerEnd()
         timerTask?.cancel()
         isRevealed = true
         roundEnded = true
