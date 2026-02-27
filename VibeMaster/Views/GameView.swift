@@ -197,6 +197,11 @@ struct GameView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     withAnimation(.spring(response: 0.45, dampingFraction: 0.65)) { timerBounceScale = 1.0 }
                 }
+                // When all tracks have been played, show podium automatically
+                if engine.currentTrackIndex + 1 >= config.tracks.count {
+                    let result = engine.buildPodiumResult()
+                    path.append(.podium(result))
+                }
             } else {
                 timerBounceScale = 1.0
             }
@@ -235,16 +240,7 @@ struct GameView: View {
             .frame(maxWidth: .infinity)
 
             if engine.roundEnded {
-                if engine.currentTrackIndex + 1 >= config.tracks.count {
-                    Button("Podium") {
-                        let result = engine.buildPodiumResult()
-                        path.append(.podium(result))
-                    }
-                    .fontWeight(.semibold)
-                    .frame(width: 90, height: 44)
-                    .background(.ultraThinMaterial, in: Capsule())
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                } else {
+                if engine.currentTrackIndex + 1 < config.tracks.count {
                     Button("Suivant") {
                         engine.nextTrack()
                         HapticManager.medium()
@@ -254,6 +250,7 @@ struct GameView: View {
                     .background(.ultraThinMaterial, in: Capsule())
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }
+                // Last track: podium is shown automatically via onChange(roundEnded)
             }
         }
     }
