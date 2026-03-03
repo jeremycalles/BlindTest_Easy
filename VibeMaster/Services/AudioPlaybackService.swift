@@ -5,8 +5,9 @@
 
 import Foundation
 import AVFoundation
+import VibeMasterCore
 
-final class AudioPlaybackService {
+final class AudioPlaybackService: AudioPlaybackProtocol {
     static let shared = AudioPlaybackService()
     private var player: AVPlayer?
     private var fadeTimer: Timer?

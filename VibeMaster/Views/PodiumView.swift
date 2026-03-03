@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import VibeMasterCore
 
 struct PodiumView: View {
     let results: PodiumResult
@@ -28,7 +29,12 @@ struct PodiumView: View {
                 endPoint: .bottom
             )
             .ignoresSafeArea()
-            .overlay(.ultraThinMaterial)
+            .overlay {
+                Color.clear
+                    .glassEffect(in: Rectangle())
+                    .allowsHitTesting(false)
+                    .ignoresSafeArea()
+            }
 
             if showConfetti && !reduceMotion {
                 ConfettiOverlay()
@@ -75,7 +81,7 @@ struct PodiumView: View {
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
+                        .glassEffect(in: RoundedRectangle(cornerRadius: 14))
                     }
                     .padding(.bottom, 32)
                 }
@@ -120,7 +126,7 @@ struct PodiumView: View {
         .padding(.vertical, 24)
         .padding(.horizontal, 32)
         .frame(maxWidth: .infinity)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
+        .glassEffect(in: RoundedRectangle(cornerRadius: 20))
         .overlay(
             RoundedRectangle(cornerRadius: 20)
                 .stroke(.white.opacity(0.2), lineWidth: 1)
@@ -167,7 +173,7 @@ struct PodiumView: View {
                 }
             }
         }
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .glassEffect(in: RoundedRectangle(cornerRadius: 16))
         .overlay(
             RoundedRectangle(cornerRadius: 16)
                 .stroke(.white.opacity(0.15), lineWidth: 1)

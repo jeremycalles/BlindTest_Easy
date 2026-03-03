@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import VibeMasterCore
 
 enum AppDestination: Hashable {
     case dashboard

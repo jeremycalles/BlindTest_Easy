@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import VibeMasterCore
 
 enum DeezerAPIError: Error {
     case invalidURL

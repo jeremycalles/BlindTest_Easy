@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import VibeMasterCore
 
 struct GameView: View {
     let config: GameConfig
@@ -15,7 +16,11 @@ struct GameView: View {
     init(config: GameConfig, path: Binding<[AppDestination]>) {
         self.config = config
         _path = path
-        _engine = StateObject(wrappedValue: GameEngine(config))
+        _engine = StateObject(wrappedValue: GameEngine(
+            config: config,
+            audio: AudioPlaybackService.shared,
+            onTimerEnd: { HapticManager.timerEnd() }
+        ))
     }
 
     // Manual position for track header — change trackHeaderTop / trackHeaderLeading to move it.
@@ -99,7 +104,12 @@ struct GameView: View {
                     .ignoresSafeArea()
             }
         }
-        .overlay(.ultraThinMaterial)
+        .overlay {
+            Color.clear
+                .glassEffect(in: Rectangle())
+                .allowsHitTesting(false)
+                .ignoresSafeArea()
+        }
     }
 
     private var trackHeader: some View {
@@ -132,12 +142,13 @@ struct GameView: View {
         }
         .frame(height: trackCardHeight)
         .padding(12)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+        .glassEffect(in: RoundedRectangle(cornerRadius: 12))
         .overlay {
             if config.mcPlaysMode && !engine.isRevealed {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(.ultraThickMaterial)
+                    .fill(Color(.systemBackground).opacity(0.95))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .glassEffect(in: RoundedRectangle(cornerRadius: 12))
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -248,7 +259,7 @@ struct GameView: View {
                     }
                     .fontWeight(.semibold)
                     .frame(width: 90, height: 44)
-                    .background(.ultraThinMaterial, in: Capsule())
+                    .glassEffect(in: Capsule())
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 // Last track: podium is shown automatically via onChange(roundEnded)
@@ -293,60 +304,69 @@ struct PlayerTile: View {
     let onDoubleTap: () -> Void
     let onLongPress: () -> Void
 
-    var body: some View {
-        Button(action: onTap) {
-            ZStack {
-                // Background
-                RoundedRectangle(cornerRadius: 24)
-                    .fill(.ultraThinMaterial)
-                    .colorScheme(.dark) // Force dark material look
-                    .opacity(0.6)
-                
-                // Glowing border
-                RoundedRectangle(cornerRadius: 24)
-                    .strokeBorder(color, lineWidth: 3)
-                    .shadow(color: color.opacity(0.8), radius: 8, x: 0, y: 0)
-                
-                VStack(alignment: .leading) {
-                    HStack(alignment: .top) {
-                        Image(systemName: iconName)
-                            .font(.system(size: 28))
-                            .foregroundStyle(color)
-                            .shadow(color: color.opacity(0.8), radius: 6)
-                        
-                        Spacer()
-                        
-                        Text("\(score)")
-                            .font(.system(size: 36, weight: .bold, design: .rounded))
-                            .foregroundStyle(.white)
-                            .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
-                    }
-                    
+    @State private var isPressed = false
+    @State private var longPressConsumed = false
+
+    private var tileContent: some View {
+        ZStack {
+            // Background
+            RoundedRectangle(cornerRadius: 24)
+                .glassEffect(in: RoundedRectangle(cornerRadius: 24))
+                .opacity(0.6)
+
+            // Glowing border
+            RoundedRectangle(cornerRadius: 24)
+                .strokeBorder(color, lineWidth: 3)
+                .shadow(color: color.opacity(0.8), radius: 8, x: 0, y: 0)
+
+            VStack(alignment: .leading) {
+                HStack(alignment: .top) {
+                    Image(systemName: iconName)
+                        .font(.system(size: 28))
+                        .foregroundStyle(color)
+                        .shadow(color: color.opacity(0.8), radius: 6)
+
                     Spacer()
-                    
-                    Text(name)
-                        .font(.title3)
-                        .fontWeight(.bold)
+
+                    Text("\(score)")
+                        .font(.system(size: 36, weight: .bold, design: .rounded))
                         .foregroundStyle(.white)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.6)
                         .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
                 }
-                .padding(16)
+
+                Spacer()
+
+                Text(name)
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+                    .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
             }
-            .clipShape(RoundedRectangle(cornerRadius: 24))
-            .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 4)
+            .padding(16)
         }
-        .buttonStyle(ScaleButtonStyle())
-        .contextMenu {
-            Button("Diminuer le score", role: .none) {
+        .clipShape(RoundedRectangle(cornerRadius: 24))
+        .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 4)
+    }
+
+    var body: some View {
+        tileContent
+            .scaleEffect(isPressed ? 0.96 : 1)
+            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
+            .onLongPressGesture(minimumDuration: 0.5, maximumDistance: .infinity, pressing: { pressing in
+                isPressed = pressing
+                if pressing { longPressConsumed = false }
+            }, perform: {
+                longPressConsumed = true
                 onLongPress()
+            })
+            .onTapGesture(count: 2) {
+                onDoubleTap()
             }
-            .disabled(score <= 0)
-        }
-        .simultaneousGesture(
-            TapGesture(count: 2).onEnded { _ in onDoubleTap() }
-        )
+            .onTapGesture(count: 1) {
+                if !longPressConsumed { onTap() }
+            }
     }
 }
 

@@ -1,0 +1,47 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "PackageStructure": ["<PackageStructure>"]
+  "VibeMasterCore-arm64-apple-macosx26.0-debug.module": ["<VibeMasterCore-arm64-apple-macosx26.0-debug.module>"]
+  "main": ["<VibeMasterCore-arm64-apple-macosx26.0-debug.module>"]
+  "test": ["<VibeMasterCore-arm64-apple-macosx26.0-debug.module>"]
+default: "main"
+nodes:
+  "/Users/jcalles/github/blindTestEasy/VibeMasterCore/Sources/VibeMasterCore/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+commands:
+  "/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/VibeMasterCore.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/jcalles/github/blindTestEasy/VibeMasterCore/Sources/VibeMasterCore/AudioPlaybackProtocol.swift","/Users/jcalles/github/blindTestEasy/VibeMasterCore/Sources/VibeMasterCore/GameConfig.swift","/Users/jcalles/github/blindTestEasy/VibeMasterCore/Sources/VibeMasterCore/GameEngine.swift","/Users/jcalles/github/blindTestEasy/VibeMasterCore/Sources/VibeMasterCore/Track.swift"]
+    outputs: ["/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/VibeMasterCore.build/sources"]
+    description: "Write auxiliary file /Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/VibeMasterCore.build/sources"
+
+  "/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"]
+    outputs: ["/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+
+  "<VibeMasterCore-arm64-apple-macosx26.0-debug.module>":
+    tool: phony
+    inputs: ["/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/VibeMasterCore.build/AudioPlaybackProtocol.swift.o","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/VibeMasterCore.build/GameConfig.swift.o","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/VibeMasterCore.build/GameEngine.swift.o","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/VibeMasterCore.build/Track.swift.o","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/Modules/VibeMasterCore.swiftmodule"]
+    outputs: ["<VibeMasterCore-arm64-apple-macosx26.0-debug.module>"]
+
+  "C.VibeMasterCore-arm64-apple-macosx26.0-debug.module":
+    tool: shell
+    inputs: ["/Users/jcalles/github/blindTestEasy/VibeMasterCore/Sources/VibeMasterCore/AudioPlaybackProtocol.swift","/Users/jcalles/github/blindTestEasy/VibeMasterCore/Sources/VibeMasterCore/GameConfig.swift","/Users/jcalles/github/blindTestEasy/VibeMasterCore/Sources/VibeMasterCore/GameEngine.swift","/Users/jcalles/github/blindTestEasy/VibeMasterCore/Sources/VibeMasterCore/Track.swift","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/VibeMasterCore.build/sources"]
+    outputs: ["/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/VibeMasterCore.build/AudioPlaybackProtocol.swift.o","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/VibeMasterCore.build/GameConfig.swift.o","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/VibeMasterCore.build/GameEngine.swift.o","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/VibeMasterCore.build/Track.swift.o","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/Modules/VibeMasterCore.swiftmodule"]
+    description: "Compiling Swift Module 'VibeMasterCore' (4 sources)"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-module-name","VibeMasterCore","-emit-dependencies","-emit-module","-emit-module-path","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/Modules/VibeMasterCore.swiftmodule","-output-file-map","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/VibeMasterCore.build/output-file-map.json","-parse-as-library","-incremental","-c","@/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/VibeMasterCore.build/sources","-I","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/Modules","-target","arm64-apple-macosx10.13","-incremental","-enable-batch-mode","-serialize-diagnostics","-index-store-path","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/index/store","-Onone","-enable-testing","-j14","-DSWIFT_PACKAGE","-DDEBUG","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/ModuleCache","-parseable-output","-parse-as-library","-emit-objc-header","-emit-objc-header-path","/Users/jcalles/github/blindTestEasy/VibeMasterCore/.build/arm64-apple-macosx/debug/VibeMasterCore.build/include/VibeMasterCore-Swift.h","-swift-version","5","-plugin-path","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g","-Xcc","-isysroot","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-Xcc","-fPIC","-Xcc","-g","-package-name","vibemastercore"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Users/jcalles/github/blindTestEasy/VibeMasterCore/Sources/VibeMasterCore/","/Users/jcalles/github/blindTestEasy/VibeMasterCore/Package.swift","/Users/jcalles/github/blindTestEasy/VibeMasterCore/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+

@@ -4,9 +4,14 @@ iOS music quiz (blind test) app per FullSpec.MD.
 
 ## Structure
 
-- `VibeMaster/` – SwiftUI app source
+- **VibeMasterCore/** – Swift package (open-source business logic)
+  - Domain models: `Track`, `Artist`, `Album`, `PlaylistResponse`
+  - Game types: `GameConfig`, `PlayerScore`, `PodiumResult`
+  - `GameEngine` and `AudioPlaybackProtocol` (no API keys or app-specific config)
+- **VibeMaster/** – SwiftUI app (UI + config)
   - App entry: `VibeMasterApp.swift`, `ContentView.swift`
-  - Models, ViewModels, Views, Services, Resources as in spec
+  - Views, Services (Deezer, audio, haptics, favorites), Resources
+  - Injects config and implements protocols; keep API keys or secrets here (or in .gitignore)
 
 ## Build
 

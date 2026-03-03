@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import VibeMasterCore
 
 enum MockPlaylistService {
     static func loadTracks() async -> [Track] {

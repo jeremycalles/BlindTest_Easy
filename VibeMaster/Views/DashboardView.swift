@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import VibeMasterCore
 
 struct DashboardView: View {
     @Binding var path: [AppDestination]
@@ -88,7 +89,7 @@ struct DashboardView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
-        .background(.ultraThinMaterial)
+        .glassEffect(in: Rectangle())
         .navigationTitle("Accueil")
         .navigationBarTitleDisplayMode(.large)
         .searchable(text: $searchText, prompt: "Rechercher des playlists")

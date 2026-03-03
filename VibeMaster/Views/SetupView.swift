@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import VibeMasterCore
 
 struct SetupView: View {
     @Binding var path: [AppDestination]
@@ -151,7 +152,7 @@ struct SetupView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
-        .background(.ultraThinMaterial)
+        .glassEffect(in: Rectangle())
     }
 
     private func startGame() {
