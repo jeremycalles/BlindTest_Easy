@@ -13,5 +13,9 @@ xcuserdata/
 *.perspectivev3
 !default.perspectivev3
 
+# Swift Package Manager (e.g. VibeMasterCore)
+.build/
+.swiftpm/
+
 # macOS
 .DS_Store
