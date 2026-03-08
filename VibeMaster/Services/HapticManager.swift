@@ -12,6 +12,9 @@ import AVFoundation
 import AudioToolbox
 
 enum HapticManager {
+    /// Retain chime player so it isn’t deallocated before playback finishes.
+    private static var chimePlayer: AVAudioPlayer?
+
     static func light() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
@@ -29,8 +32,9 @@ enum HapticManager {
         let session = AVAudioSession.sharedInstance()
         try? session.setCategory(.playback, mode: .default, options: .mixWithOthers)
         try? session.setActive(true, options: .notifyOthersOnDeactivation)
-        let player = try? AVAudioPlayer(contentsOf: url)
-        player?.volume = 1.0
-        player?.play()
+        chimePlayer = try? AVAudioPlayer(contentsOf: url)
+        chimePlayer?.volume = 1.0
+        chimePlayer?.prepareToPlay()
+        chimePlayer?.play()
     }
 }
