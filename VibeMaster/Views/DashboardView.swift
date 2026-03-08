@@ -70,6 +70,13 @@ struct DashboardView: View {
                     if isLoadingSearch {
                         ProgressView()
                             .frame(maxWidth: .infinity)
+                    } else if let msg = errorMessage {
+                        Text(msg)
+                        Button("Réessayer") {
+                            errorMessage = nil
+                            Task { await runSearch() }
+                        }
+                        .buttonStyle(.bordered)
                     } else if searchResults.isEmpty {
                         Text("Aucun résultat")
                             .foregroundStyle(.secondary)
@@ -117,6 +124,8 @@ struct DashboardView: View {
         }
             }
 
+    private static let quotaExceededMessage = "Quota limit exceeded. Réessayez plus tard."
+
     private func loadChart() {
         isLoadingChart = true
         errorMessage = nil
@@ -127,6 +136,13 @@ struct DashboardView: View {
                     chartPlaylists = list
                     isLoadingChart = false
                     errorMessage = nil
+                }
+            } catch let err as DeezerAPIError {
+                await MainActor.run {
+                    errorMessage = err == .quotaExceeded
+                        ? Self.quotaExceededMessage
+                        : "Impossible de charger les playlists. Vérifiez votre connexion."
+                    isLoadingChart = false
                 }
             } catch {
                 await MainActor.run {
@@ -142,17 +158,25 @@ struct DashboardView: View {
     }
 
     private func runSearch() async {
-        await MainActor.run { isLoadingSearch = true }
+        await MainActor.run { isLoadingSearch = true; errorMessage = nil }
         do {
             let list = try await DeezerAPIService.shared.searchPlaylists(query: searchText.trimmingCharacters(in: .whitespacesAndNewlines))
             await MainActor.run {
                 searchResults = list.filter { ($0.nb_tracks ?? 0) > 0 }
                 isLoadingSearch = false
+                errorMessage = nil
+            }
+        } catch let err as DeezerAPIError {
+            await MainActor.run {
+                searchResults = []
+                isLoadingSearch = false
+                errorMessage = err == .quotaExceeded ? Self.quotaExceededMessage : "Impossible de charger les résultats."
             }
         } catch {
             await MainActor.run {
                 searchResults = []
                 isLoadingSearch = false
+                errorMessage = "Impossible de charger les résultats."
             }
         }
     }
@@ -163,6 +187,10 @@ struct DashboardView: View {
                 let tracks = try await DeezerAPIService.shared.playlistDetail(id: id)
                 await MainActor.run {
                     setupItem = SetupItem(tracks: tracks)
+                }
+            } catch let err as DeezerAPIError {
+                await MainActor.run {
+                    errorMessage = err == .quotaExceeded ? Self.quotaExceededMessage : "Impossible de charger les titres."
                 }
             } catch {
                 await MainActor.run { errorMessage = "Impossible de charger les titres." }
@@ -179,35 +207,34 @@ struct PlaylistRowView: View {
     var onTap: () -> Void = {}
 
     var body: some View {
-        Button(action: onTap) {
-            HStack {
-                AsyncImage(url: URL(string: item.picture_medium ?? "")) { image in image.resizable() }
-                    placeholder: { Color.gray.opacity(0.3) }
-                    .frame(width: 50, height: 50)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(item.title)
-                        .font(.headline)
-                        .lineLimit(1)
-                    if let n = item.nb_tracks {
-                        Text("\(n) titres")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
+        HStack {
+            AsyncImage(url: URL(string: item.picture_medium ?? "")) { image in image.resizable() }
+                placeholder: { Color.gray.opacity(0.3) }
+                .frame(width: 50, height: 50)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+            VStack(alignment: .leading, spacing: 2) {
+                Text(item.title)
+                    .font(.headline)
+                    .lineLimit(1)
+                if let n = item.nb_tracks {
+                    Text("\(n) titres")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Button {
-                    if isFavorite { onRemove() } else { onAdd() }
-                } label: {
-                    Image(systemName: isFavorite ? "heart.fill" : "heart")
-                }
-                .buttonStyle(.borderless)
             }
-            .padding(.vertical, 4)
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Button {
+                if isFavorite { onRemove() } else { onAdd() }
+            } label: {
+                Image(systemName: isFavorite ? "heart.fill" : "heart")
+            }
+            .buttonStyle(.borderless)
         }
-        .buttonStyle(.plain)
+        .padding(.vertical, 4)
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onTap)
     }
 }
