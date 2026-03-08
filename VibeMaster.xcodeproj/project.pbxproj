@@ -21,11 +21,11 @@
 		F001000F /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F002000F /* HapticManager.swift */; };
 		F0010010 /* MockData.json in Resources */ = {isa = PBXBuildFile; fileRef = F0020010 /* MockData.json */; };
 		F0010011 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0020011 /* Assets.xcassets */; };
+		F0010012 /* LastGameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0020012 /* LastGameState.swift */; };
+		F0010013 /* VibeMasterCore in Frameworks */ = {isa = PBXBuildFile; productRef = F00PACK1 /* VibeMasterCore */; };
 		F0010014 /* chime.wav in Resources */ = {isa = PBXBuildFile; fileRef = F0020013 /* chime.wav */; };
 		F0010015 /* chime_high.wav in Resources */ = {isa = PBXBuildFile; fileRef = F0020014 /* chime_high.wav */; };
 		F0010016 /* applause.wav in Resources */ = {isa = PBXBuildFile; fileRef = F0020015 /* applause.wav */; };
-		F0010012 /* LastGameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0020012 /* LastGameState.swift */; };
-		F0010013 /* VibeMasterCore in Frameworks */ = {isa = PBXBuildFile; productRef = F00PACK1 /* VibeMasterCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,10 +44,10 @@
 		F002000F /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		F0020010 /* MockData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockData.json; sourceTree = "<group>"; };
 		F0020011 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F0020012 /* LastGameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastGameState.swift; sourceTree = "<group>"; };
 		F0020013 /* chime.wav */ = {isa = PBXFileReference; lastKnownFileType = file.wav; path = chime.wav; sourceTree = "<group>"; };
 		F0020014 /* chime_high.wav */ = {isa = PBXFileReference; lastKnownFileType = file.wav; path = chime_high.wav; sourceTree = "<group>"; };
 		F0020015 /* applause.wav */ = {isa = PBXFileReference; lastKnownFileType = file.wav; path = applause.wav; sourceTree = "<group>"; };
-		F0020012 /* LastGameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastGameState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -373,7 +373,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -387,7 +387,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vibemaster.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -404,7 +404,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -418,7 +418,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vibemaster.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
