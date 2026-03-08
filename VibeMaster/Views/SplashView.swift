@@ -7,6 +7,8 @@ import SwiftUI
 
 struct SplashView: View {
     @Binding var path: [AppDestination]
+    @State private var showSplashConfetti = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: 32) {
@@ -38,5 +40,15 @@ struct SplashView: View {
         .background(
             LinearGradient(colors: [.indigo, .purple], startPoint: .top, endPoint: .bottom)
         )
+        .overlay {
+            if showSplashConfetti && !reduceMotion {
+                ConfettiView(isActive: $showSplashConfetti)
+                    .allowsHitTesting(false)
+            }
+        }
+        .onAppear {
+            showSplashConfetti = true
+            HapticManager.playApplause(duration: 3)
+        }
     }
 }

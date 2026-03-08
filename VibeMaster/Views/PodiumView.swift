@@ -73,7 +73,7 @@ struct PodiumView: View {
 
                     // Action buttons
                     VStack(spacing: 12) {
-                        Button("Retour à l'accueil") {
+                        Button("Une nouvelle partie!") {
                             HapticManager.medium()
                             path = [.dashboard]
                         }

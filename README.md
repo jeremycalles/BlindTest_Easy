@@ -1,6 +1,6 @@
 # VibeMaster
 
-iOS music quiz (blind test) app per FullSpec.MD.
+iOS music quiz (blind test) app with a French UI. Flow: **Splash** → **Dashboard** → **Setup** → **Game** → **Podium**. Uses Deezer for tracks, haptics and sound (countdown chimes, applause) for feedback, glass-style visuals, and confetti on splash and results; respects **Reduce Motion** accessibility.
 
 ## Structure
 
@@ -9,8 +9,10 @@ iOS music quiz (blind test) app per FullSpec.MD.
   - Game types: `GameConfig`, `PlayerScore`, `PodiumResult`
   - `GameEngine` and `AudioPlaybackProtocol` (no API keys or app-specific config)
 - **VibeMaster/** – SwiftUI app (UI + config)
-  - App entry: `VibeMasterApp.swift`, `ContentView.swift`
-  - Views, Services (Deezer, audio, haptics, favorites), Resources
+  - App entry: `VibeMasterApp.swift`, `ContentView.swift` (navigation: `AppDestination`)
+  - Views: `SplashView`, `DashboardView`, `SetupView`, `GameView`, `PodiumView`
+  - Services: Deezer, audio, **HapticManager** (impact, timer chimes `chime.wav` / `chime_high.wav`, applause), favorites
+  - Resources: WAV assets for chimes and applause
   - Injects config and implements protocols; keep API keys or secrets here (or in .gitignore)
 
 ## Build

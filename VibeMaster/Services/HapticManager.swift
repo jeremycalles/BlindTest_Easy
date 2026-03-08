@@ -14,6 +14,8 @@ import AudioToolbox
 enum HapticManager {
     /// Retain chime player so it isn’t deallocated before playback finishes.
     private static var chimePlayer: AVAudioPlayer?
+    /// Retain applause player so it isn't deallocated before playback finishes.
+    private static var applausePlayer: AVAudioPlayer?
 
     static func light() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -35,6 +37,21 @@ enum HapticManager {
             AudioServicesPlaySystemSound(1075)
         }
     }
+    /// Plays applause (applause.wav) for at most the given duration (default 3s). Stops after duration if the file is longer.
+    static func playApplause(duration: TimeInterval = 3) {
+        guard let url = Bundle.main.url(forResource: "applause", withExtension: "wav") else { return }
+        let session = AVAudioSession.sharedInstance()
+        try? session.setCategory(.playback, mode: .default, options: .mixWithOthers)
+        try? session.setActive(true, options: .notifyOthersOnDeactivation)
+        applausePlayer = try? AVAudioPlayer(contentsOf: url)
+        applausePlayer?.volume = 1.0
+        applausePlayer?.prepareToPlay()
+        applausePlayer?.play()
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            applausePlayer?.stop()
+        }
+    }
+
     /// Plays bundled WAV by resource name. Returns true if played.
     private static func playChime(resource: String) -> Bool {
         guard let url = Bundle.main.url(forResource: resource, withExtension: "wav") else { return false }
