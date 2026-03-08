@@ -360,9 +360,9 @@ struct ConfettiParticle: View {
     private var color: Color { colors[index % colors.count] }
 
     var body: some View {
-        RoundedRectangle(cornerRadius: 4)
+        RoundedRectangle(cornerRadius: 2)
             .fill(color)
-            .frame(width: 16, height: 16)
+            .frame(width: 5, height: 5)
             .position(x: center.x + endX * progress, y: center.y + endY * progress)
             .opacity(1 - progress)
             .animation(.easeOut(duration: 0.85).delay(delay), value: progress)
