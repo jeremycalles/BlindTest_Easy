@@ -60,7 +60,7 @@ struct DashboardView: View {
                                 FavoritesManager.shared.remove(id: item.id)
                                 HapticManager.light()
                                 loadFavorites()
-                            }                             onTap: { selectPlaylist(id: item.id) }
+                            } onTap: { selectPlaylist(id: item.id) }
                         }
                     }
                 }

@@ -24,7 +24,7 @@ enum HapticManager {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
     }
     /// Plays countdown chime (chime.wav) at 3, 2, 1 seconds left.
-    static func timerTick(secondsLeft: Int) {
+    static func timerTick() {
         _ = playChime(resource: "chime")
     }
     /// Plays timer-end chime (chime_high.wav, 2 semitones up) and medium haptic. Call when the round timer reaches zero.

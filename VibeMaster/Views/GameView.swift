@@ -20,7 +20,7 @@ struct GameView: View {
             config: config,
             audio: AudioPlaybackService.shared,
             onTimerEnd: { HapticManager.timerEnd() },
-            onTimerTick: { HapticManager.timerTick(secondsLeft: $0) }
+            onTimerTick: { _ in HapticManager.timerTick() }
         ))
     }
 
@@ -63,9 +63,6 @@ struct GameView: View {
             }
         }
         .safeAreaInset(edge: .top, spacing: 0) { Color.clear.frame(height: 0) }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            Color.clear.frame(height: max(14, 0))
-        }
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
@@ -468,10 +465,3 @@ struct PlayerTile: View {
     }
 }
 
-struct ScaleButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.96 : 1)
-            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed)
-    }
-}
