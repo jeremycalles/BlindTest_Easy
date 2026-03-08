@@ -16,7 +16,7 @@ enum AppDestination: Hashable {
 }
 
 struct ContentView: View {
-    @State private var path: [AppDestination] = [.dashboard]
+    @State private var path: [AppDestination] = []
 
     var body: some View {
         NavigationStack(path: $path) {
