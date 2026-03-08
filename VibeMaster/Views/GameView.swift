@@ -294,6 +294,83 @@ struct GameView: View {
     }
 }
 
+// MARK: - Confetti
+
+private let confettiColors: [Color] = [
+    Color(red: 1, green: 0.8, blue: 0.2),
+    Color(red: 1, green: 0.4, blue: 0.2),
+    Color(red: 0.2, green: 0.8, blue: 0.5),
+    Color(red: 0.3, green: 0.5, blue: 1),
+    Color(red: 1, green: 0.4, blue: 0.7),
+    Color(red: 0.9, green: 0.5, blue: 1)
+]
+
+struct ConfettiView: View {
+    @Binding var isActive: Bool
+    @State private var burstProgress: CGFloat = 1
+    private let particleCount = 50
+    private let duration: TimeInterval = 1.0
+
+    var body: some View {
+        GeometryReader { geo in
+            let center = CGPoint(x: geo.size.width / 2, y: geo.size.height / 2)
+            ZStack {
+                ForEach(0..<particleCount, id: \.self) { i in
+                    ConfettiParticle(index: i, center: center, progress: burstProgress, colors: confettiColors)
+                }
+            }
+            .allowsHitTesting(false)
+        }
+        .onAppear {
+            if isActive {
+                burstProgress = 0
+                withAnimation(.easeOut(duration: 0.85)) { burstProgress = 1 }
+                DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                    var t = Transaction()
+                    t.disablesAnimations = true
+                    withTransaction(t) { isActive = false }
+                }
+            }
+        }
+        .onChange(of: isActive) { _, active in
+            if active {
+                burstProgress = 0
+                withAnimation(.easeOut(duration: 0.85)) { burstProgress = 1 }
+                DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                    var t = Transaction()
+                    t.disablesAnimations = true
+                    withTransaction(t) { isActive = false }
+                }
+            }
+        }
+    }
+}
+
+struct ConfettiParticle: View {
+    let index: Int
+    let center: CGPoint
+    let progress: CGFloat
+    let colors: [Color]
+
+    private var angle: Double { Double(index) * 0.14 * 2 * .pi }
+    private var distance: CGFloat { 50 + CGFloat(index % 12) * 10 }
+    private var endX: CGFloat { cos(angle) * distance + CGFloat(index % 7 - 3) * 10 }
+    private var endY: CGFloat { sin(angle) * distance * 0.6 + CGFloat(index % 5) * 14 }
+    private var delay: Double { Double(index % 6) * 0.02 }
+    private var color: Color { colors[index % colors.count] }
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 4)
+            .fill(color)
+            .frame(width: 16, height: 16)
+            .position(x: center.x + endX * progress, y: center.y + endY * progress)
+            .opacity(1 - progress)
+            .animation(.easeOut(duration: 0.85).delay(delay), value: progress)
+    }
+}
+
+// MARK: - Player tile
+
 struct PlayerTile: View {
     let name: String
     let score: Int
@@ -306,6 +383,7 @@ struct PlayerTile: View {
 
     @State private var isPressed = false
     @State private var longPressConsumed = false
+    @State private var showConfetti = false
 
     private var tileContent: some View {
         ZStack {
@@ -354,6 +432,11 @@ struct PlayerTile: View {
         tileContent
             .scaleEffect(isPressed ? 0.96 : 1)
             .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
+            .overlay {
+                if showConfetti {
+                    ConfettiView(isActive: $showConfetti)
+                }
+            }
             .onLongPressGesture(minimumDuration: 0.5, maximumDistance: .infinity, pressing: { pressing in
                 isPressed = pressing
                 if pressing { longPressConsumed = false }
@@ -362,10 +445,14 @@ struct PlayerTile: View {
                 onLongPress()
             })
             .onTapGesture(count: 2) {
+                showConfetti = true
                 onDoubleTap()
             }
             .onTapGesture(count: 1) {
-                if !longPressConsumed { onTap() }
+                if !longPressConsumed {
+                    showConfetti = true
+                    onTap()
+                }
             }
     }
 }
