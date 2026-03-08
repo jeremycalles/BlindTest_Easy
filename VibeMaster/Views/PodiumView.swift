@@ -9,8 +9,16 @@ import VibeMasterCore
 struct PodiumView: View {
     let results: PodiumResult
     @Binding var path: [AppDestination]
-    @State private var showConfetti = true
+    @State private var showWinnerConfetti = false
+    @State private var showConfettiForRank: [Bool]
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    init(results: PodiumResult, path: Binding<[AppDestination]>) {
+        self.results = results
+        _path = path
+        let otherCount = max(0, results.playerScores.count - 1)
+        _showConfettiForRank = State(initialValue: Array(repeating: false, count: otherCount))
+    }
 
     private var winner: PlayerScore? { results.playerScores.first }
     private var otherPlayers: [PlayerScore] {
@@ -36,11 +44,6 @@ struct PodiumView: View {
                     .ignoresSafeArea()
             }
 
-            if showConfetti && !reduceMotion {
-                ConfettiOverlay()
-                    .allowsHitTesting(false)
-            }
-
             ScrollView {
                 VStack(spacing: 24) {
                     // Title block
@@ -62,6 +65,12 @@ struct PodiumView: View {
                     // Winner card
                     if let winner = winner {
                         winnerCard(winner)
+                            .overlay {
+                                if !reduceMotion {
+                                    ConfettiView(isActive: $showWinnerConfetti)
+                                        .allowsHitTesting(false)
+                                }
+                            }
                     }
 
                     // Other players ranking card
@@ -89,10 +98,24 @@ struct PodiumView: View {
             }
         }
         .onAppear {
-            if !reduceMotion {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                    withAnimation(.easeOut(duration: 0.5)) {
-                        showConfetti = false
+            // Applause when results screen appears (plays full file)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                HapticManager.playApplause()
+            }
+            guard !reduceMotion else { return }
+            // Winner card confetti after 1 second
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                showWinnerConfetti = true
+            }
+            // Each ranking row confetti after winner (2s, 3s, 4s...)
+            let n = otherPlayers.count
+            for i in 0..<n {
+                let rankIndex = i
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0 + Double(i)) {
+                    if rankIndex < showConfettiForRank.count {
+                        var updated = showConfettiForRank
+                        updated[rankIndex] = true
+                        showConfettiForRank = updated
                     }
                 }
             }
@@ -164,6 +187,19 @@ struct PodiumView: View {
                 }
                 .padding(.vertical, 12)
                 .padding(.horizontal, 16)
+                .overlay {
+                    if !reduceMotion && index < showConfettiForRank.count {
+                        ConfettiView(isActive: Binding(
+                            get: { showConfettiForRank[index] },
+                            set: { new in
+                                var updated = showConfettiForRank
+                                if index < updated.count { updated[index] = new }
+                                showConfettiForRank = updated
+                            }
+                        ))
+                        .allowsHitTesting(false)
+                    }
+                }
 
                 if index < otherPlayers.count - 1 {
                     Rectangle()
@@ -178,19 +214,5 @@ struct PodiumView: View {
             RoundedRectangle(cornerRadius: 16)
                 .stroke(.white.opacity(0.15), lineWidth: 1)
         )
-    }
-}
-
-struct ConfettiOverlay: View {
-    var body: some View {
-        GeometryReader { geo in
-            ForEach(0..<30, id: \.self) { i in
-                RoundedRectangle(cornerRadius: 2)
-                    .fill([Color.orange, .purple, .pink, .yellow, .cyan, .white].randomElement()!)
-                    .frame(width: CGFloat.random(in: 4...10), height: CGFloat.random(in: 4...10))
-                    .position(x: CGFloat.random(in: 0...geo.size.width), y: -20)
-            }
-        }
-        .allowsHitTesting(false)
     }
 }

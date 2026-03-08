@@ -47,8 +47,14 @@ struct SplashView: View {
             }
         }
         .onAppear {
+            // Only play confetti and applause when the splash is actually visible (path empty).
+            // With path = [.dashboard] at launch, the root SplashView is still in the hierarchy
+            // so onAppear runs while the user sees Dashboard — guard so we don't play there.
+            guard path.isEmpty else { return }
             showSplashConfetti = true
-            HapticManager.playApplause(duration: 3)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                HapticManager.playApplause()
+            }
         }
     }
 }

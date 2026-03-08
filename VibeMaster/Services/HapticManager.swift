@@ -37,8 +37,8 @@ enum HapticManager {
             AudioServicesPlaySystemSound(1075)
         }
     }
-    /// Plays applause (applause.wav) for at most the given duration (default 3s). Stops after duration if the file is longer.
-    static func playApplause(duration: TimeInterval = 3) {
+    /// Plays applause (applause.wav) in full until the end of the file.
+    static func playApplause() {
         guard let url = Bundle.main.url(forResource: "applause", withExtension: "wav") else { return }
         let session = AVAudioSession.sharedInstance()
         try? session.setCategory(.playback, mode: .default, options: .mixWithOthers)
@@ -47,9 +47,6 @@ enum HapticManager {
         applausePlayer?.volume = 1.0
         applausePlayer?.prepareToPlay()
         applausePlayer?.play()
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-            applausePlayer?.stop()
-        }
     }
 
     /// Plays bundled WAV by resource name. Returns true if played.
