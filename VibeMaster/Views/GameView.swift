@@ -323,7 +323,9 @@ struct ConfettiView: View {
         }
         .onAppear {
             if isActive {
-                burstProgress = 0
+                var t = Transaction()
+                t.disablesAnimations = true
+                withTransaction(t) { burstProgress = 0 }
                 withAnimation(.easeOut(duration: 0.85)) { burstProgress = 1 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                     var t = Transaction()
@@ -334,7 +336,9 @@ struct ConfettiView: View {
         }
         .onChange(of: isActive) { _, active in
             if active {
-                burstProgress = 0
+                var t = Transaction()
+                t.disablesAnimations = true
+                withTransaction(t) { burstProgress = 0 }
                 withAnimation(.easeOut(duration: 0.85)) { burstProgress = 1 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                     var t = Transaction()
