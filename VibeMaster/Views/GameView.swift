@@ -363,6 +363,8 @@ struct ConfettiParticle: View {
         RoundedRectangle(cornerRadius: 2)
             .fill(color)
             .frame(width: 5, height: 5)
+            .shadow(color: color.opacity(0.9), radius: 6)
+            .shadow(color: color.opacity(0.5), radius: 12)
             .position(x: center.x + endX * progress, y: center.y + endY * progress)
             .opacity(1 - progress)
             .animation(.easeOut(duration: 0.85).delay(delay), value: progress)
