@@ -22,6 +22,7 @@
 		F0010010 /* MockData.json in Resources */ = {isa = PBXBuildFile; fileRef = F0020010 /* MockData.json */; };
 		F0010011 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0020011 /* Assets.xcassets */; };
 		F0010014 /* chime.wav in Resources */ = {isa = PBXBuildFile; fileRef = F0020013 /* chime.wav */; };
+		F0010015 /* chime_high.wav in Resources */ = {isa = PBXBuildFile; fileRef = F0020014 /* chime_high.wav */; };
 		F0010012 /* LastGameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0020012 /* LastGameState.swift */; };
 		F0010013 /* VibeMasterCore in Frameworks */ = {isa = PBXBuildFile; productRef = F00PACK1 /* VibeMasterCore */; };
 /* End PBXBuildFile section */
@@ -43,6 +44,7 @@
 		F0020010 /* MockData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockData.json; sourceTree = "<group>"; };
 		F0020011 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F0020013 /* chime.wav */ = {isa = PBXFileReference; lastKnownFileType = file.wav; path = chime.wav; sourceTree = "<group>"; };
+		F0020014 /* chime_high.wav */ = {isa = PBXFileReference; lastKnownFileType = file.wav; path = chime_high.wav; sourceTree = "<group>"; };
 		F0020012 /* LastGameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastGameState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -133,6 +135,7 @@
 				F0020010 /* MockData.json */,
 				F0020011 /* Assets.xcassets */,
 				F0020013 /* chime.wav */,
+				F0020014 /* chime_high.wav */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -205,6 +208,7 @@
 				F0010010 /* MockData.json in Resources */,
 				F0010011 /* Assets.xcassets in Resources */,
 				F0010014 /* chime.wav in Resources */,
+				F0010015 /* chime_high.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

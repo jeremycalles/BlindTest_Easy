@@ -14,6 +14,7 @@ public final class GameEngine: ObservableObject {
     private let config: GameConfig
     private let audio: AudioPlaybackProtocol
     private let onTimerEnd: () -> Void
+    private let onTimerTick: (Int) -> Void
     private var timerTask: Task<Void, Never>?
 
     @Published public private(set) var currentTrackIndex = 0
@@ -28,10 +29,11 @@ public final class GameEngine: ObservableObject {
         return config.tracks[currentTrackIndex]
     }
 
-    public init(config: GameConfig, audio: AudioPlaybackProtocol, onTimerEnd: @escaping () -> Void) {
+    public init(config: GameConfig, audio: AudioPlaybackProtocol, onTimerEnd: @escaping () -> Void, onTimerTick: @escaping (Int) -> Void) {
         self.config = config
         self.audio = audio
         self.onTimerEnd = onTimerEnd
+        self.onTimerTick = onTimerTick
         config.playerNames.forEach { scores[$0] = 0 }
         type(of: audio).configureSession()
     }
@@ -53,12 +55,17 @@ public final class GameEngine: ObservableObject {
         timerTask?.cancel()
         let totalSteps = config.timerSeconds * 10
         let stepNanoseconds: UInt64 = 100_000_000
+        var previousRemaining = config.timerSeconds
         timerTask = Task { @MainActor in
             for step in 0..<totalSteps {
                 if Task.isCancelled { break }
                 try? await Task.sleep(nanoseconds: stepNanoseconds)
                 if Task.isCancelled { break }
                 timeRemaining = max(0, config.timerSeconds - (step + 1) / 10)
+                if (1...3).contains(timeRemaining) && timeRemaining != previousRemaining {
+                    onTimerTick(timeRemaining)
+                }
+                previousRemaining = timeRemaining
                 if timeRemaining == 0 {
                     reveal()
                     break

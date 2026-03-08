@@ -21,14 +21,23 @@ enum HapticManager {
     static func medium() {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
     }
-    /// Plays timer-end chime (bundled chime.wav) and medium haptic. Call when the round timer reaches zero.
-    /// Falls back to system sound 1075 if the bundled chime is missing.
+    /// Plays countdown chime (chime.wav) at 3, 2, 1 seconds left.
+    static func timerTick(secondsLeft: Int) {
+        _ = playChime(resource: "chime")
+    }
+    /// Plays timer-end chime (chime_high.wav, 2 semitones up) and medium haptic. Call when the round timer reaches zero.
     static func timerEnd() {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        guard let url = Bundle.main.url(forResource: "chime", withExtension: "wav") else {
-            AudioServicesPlaySystemSound(1075)
-            return
+        if !playChime(resource: "chime_high") {
+            _ = playChime(resource: "chime")
         }
+        if chimePlayer == nil {
+            AudioServicesPlaySystemSound(1075)
+        }
+    }
+    /// Plays bundled WAV by resource name. Returns true if played.
+    private static func playChime(resource: String) -> Bool {
+        guard let url = Bundle.main.url(forResource: resource, withExtension: "wav") else { return false }
         let session = AVAudioSession.sharedInstance()
         try? session.setCategory(.playback, mode: .default, options: .mixWithOthers)
         try? session.setActive(true, options: .notifyOthersOnDeactivation)
@@ -36,5 +45,6 @@ enum HapticManager {
         chimePlayer?.volume = 1.0
         chimePlayer?.prepareToPlay()
         chimePlayer?.play()
+        return chimePlayer != nil
     }
 }

@@ -19,7 +19,8 @@ struct GameView: View {
         _engine = StateObject(wrappedValue: GameEngine(
             config: config,
             audio: AudioPlaybackService.shared,
-            onTimerEnd: { HapticManager.timerEnd() }
+            onTimerEnd: { HapticManager.timerEnd() },
+            onTimerTick: { HapticManager.timerTick(secondsLeft: $0) }
         ))
     }
 
