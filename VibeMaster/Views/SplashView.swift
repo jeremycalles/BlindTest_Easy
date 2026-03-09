@@ -17,7 +17,7 @@ struct SplashView: View {
                 Image(systemName: "music.note.list")
                     .font(.system(size: 72))
                     .symbolRenderingMode(.hierarchical)
-                Text("VibeMaster")
+                Text("BlindTest Easy")
                     .font(.largeTitle)
                     .bold()
             }

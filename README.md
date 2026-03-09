@@ -1,6 +1,6 @@
-# VibeMaster
+# BlindTest Easy
 
-iOS music quiz (blind test) app with a French UI. Flow: **Splash** → **Dashboard** → **Setup** → **Game** → **Podium**. Uses Deezer for tracks, haptics and sound (countdown chimes, applause) for feedback, glass-style visuals, and confetti on splash and results; respects **Reduce Motion** accessibility.
+iOS music quiz (blind test) app with a French UI. The Xcode project and targets are still named VibeMaster; the app displays as **BlindTest Easy**. Flow: **Splash** → **Dashboard** → **Setup** → **Game** → **Podium**. Uses Deezer for tracks, haptics and sound (countdown chimes, applause) for feedback, glass-style visuals, and confetti on splash and results; respects **Reduce Motion** accessibility.
 
 ## Structure
 

@@ -54,7 +54,7 @@ struct PodiumView: View {
                             .tracking(1.2)
                             .foregroundStyle(.white.opacity(0.95))
 
-                        Text("Et le VibeMaster est...")
+                        Text("Et le BlindTest Easy est...")
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundStyle(.white)
