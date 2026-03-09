@@ -34,7 +34,7 @@ Quiz musique et blind test
 **Limite : 170 caractères** (modifiable sans nouvelle version)
 
 ```
-Jouez au blind test entre amis avec les playlists Deezer. Chrono réglable, mode MC, haptiques et sons. Interface vitrée et accessibilité Réduire les mouvements.
+Jouez au blind test entre amis avec les playlists Deezer. Chrono réglable, mode MC, haptiques et sons. Interface LiquidGlass et accessibilité Réduire les mouvements.
 ```
 *Caractères : 127*
 
