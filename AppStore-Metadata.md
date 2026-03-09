@@ -56,7 +56,8 @@ FONCTIONNALITÉS
 DÉROULEMENT
 Écran d’accueil → Tableau de bord → Configuration (joueurs, chrono, pistes) → Partie → Podium et classement.
 
-Les morceaux viennent de Deezer (tops et recherche). Aucun compte requis. Données de démonstration disponibles hors ligne.
+Les morceaux et playlist viennent de Deezer (tops et recherche). Aucun compte requis. 
+Créez vos playlists sur Deezer pour les utiliser dans le jeu.
 ```
 *Caractères : ~780*
 
