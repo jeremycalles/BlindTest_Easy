@@ -79,17 +79,17 @@ blind test,quiz musique,devine la chanson,Deezer,jeu soirée,multijoueur,party
 
 ### URL d’assistance
 ```
-https://example.com/support
+https://github.com/jeremycalles/BlindTest_Easy
 ```
 
 ### URL marketing (optionnel)
 ```
-https://example.com
+https://github.com/jeremycalles/BlindTest_Easy
 ```
 
 ### URL de politique de confidentialité
 ```
-https://example.com/privacy
+https://github.com/jeremycalles/BlindTest_Easy
 ```
 
 ### Catégorie
@@ -172,17 +172,17 @@ blind test,music quiz,guess song,Deezer,party game,multiplayer,quiz
 
 ### Support URL
 ```
-https://example.com/support
+https://github.com/jeremycalles/BlindTest_Easy
 ```
 
 ### Marketing URL (optional)
 ```
-https://example.com
+https://github.com/jeremycalles/BlindTest_Easy
 ```
 
 ### Privacy Policy URL
 ```
-https://example.com/privacy
+https://github.com/jeremycalles/BlindTest_Easy
 ```
 
 ### Category
