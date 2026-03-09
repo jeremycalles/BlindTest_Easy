@@ -90,6 +90,9 @@ struct DashboardView: View {
                     }
                 }
             }
+            Section {
+                DeezerAttributionView()
+            }
         }
         .navigationDestination(item: $setupItem) { item in
             SetupView(path: $path, initialTracks: item.tracks, onCancel: { setupItem = nil })
@@ -236,5 +239,16 @@ struct PlaylistRowView: View {
         .padding(.vertical, 4)
         .contentShape(Rectangle())
         .onTapGesture(perform: onTap)
+    }
+}
+
+// MARK: - Deezer attribution (required by Deezer API terms: https://developers.deezer.com/guidelines/logo)
+struct DeezerAttributionView: View {
+    var body: some View {
+        Link("Powered by Deezer", destination: URL(string: "https://www.deezer.com")!)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
     }
 }

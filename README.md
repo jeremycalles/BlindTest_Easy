@@ -36,3 +36,5 @@ Run the regression test suite from Xcode:
 ## Deezer API
 
 No auth required; uses public endpoints (chart, search, playlist detail). Network access only for Deezer; mock data works offline.
+
+**Attribution:** Deezer’s terms require a visible “Powered by Deezer” mention and the official Deezer logo in the app. See [DEEZER_ATTRIBUTION.md](DEEZER_ATTRIBUTION.md) for details and how to add the logo.

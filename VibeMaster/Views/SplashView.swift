@@ -35,6 +35,10 @@ struct SplashView: View {
             .tint(.white)
             .foregroundStyle(.indigo)
             .padding(.bottom, 48)
+            Text("Powered by Deezer")
+                .font(.caption2)
+                .foregroundStyle(.white.opacity(0.8))
+                .padding(.bottom, 16)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
