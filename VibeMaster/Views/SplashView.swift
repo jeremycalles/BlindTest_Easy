@@ -17,13 +17,13 @@ struct SplashView: View {
                 Image(systemName: "music.note.list")
                     .font(.system(size: 72))
                     .symbolRenderingMode(.hierarchical)
-                Text("BlindTest Easy")
+                Text("splash.app_name")
                     .font(.largeTitle)
                     .bold()
             }
             .foregroundStyle(.white)
             Spacer()
-            Button(AppStrings.Splash.startButton) {
+            Button("splash.start_button") {
                 HapticManager.medium()
                 path.append(.dashboard)
             }
@@ -35,7 +35,7 @@ struct SplashView: View {
             .tint(.white)
             .foregroundStyle(.indigo)
             .padding(.bottom, 48)
-            Text(AppStrings.Splash.poweredByDeezer)
+            Text("splash.powered_by_deezer")
                 .font(.caption2)
                 .foregroundStyle(.white.opacity(0.8))
                 .padding(.bottom, 16)

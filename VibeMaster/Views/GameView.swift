@@ -71,8 +71,8 @@ struct GameView: View {
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                 }
-                .accessibilityLabel("Arrêter la partie")
-                .accessibilityHint("Affiche une confirmation pour quitter la partie en cours")
+                .accessibilityLabel(AppStrings.Game.stopButton)
+                .accessibilityHint(AppStrings.Game.stopHint)
             }
         }
         .confirmationDialog(AppStrings.Game.stopTitle, isPresented: $showStopGameConfirmation) {
@@ -113,7 +113,7 @@ struct GameView: View {
     }
 
     private var trackHeader: some View {
-        Text("PISTE \(engine.currentTrackIndex + 1) / \(config.tracks.count)")
+        Text(AppStrings.Game.trackHeader(current: engine.currentTrackIndex + 1, total: config.tracks.count))
             .font(.caption)
             .fontWeight(.medium)
             .tracking(1.5)
@@ -245,8 +245,8 @@ struct GameView: View {
                     .foregroundStyle(Color(red: 1, green: 0.4, blue: 0.2))
             }
             .frame(maxWidth: .infinity)
-            .accessibilityLabel(engine.isPlaying ? "Pause" : "Lecture")
-            .accessibilityHint("Met en pause ou reprend l’extrait musical")
+            .accessibilityLabel(engine.isPlaying ? AppStrings.Game.pause : AppStrings.Game.play)
+            .accessibilityHint(AppStrings.Game.playPauseHint)
 
             if engine.roundEnded {
                 if engine.currentTrackIndex + 1 < config.tracks.count {
@@ -258,8 +258,8 @@ struct GameView: View {
                     .frame(width: 90, height: 44)
                     .glassEffect(in: Capsule())
                     .frame(maxWidth: .infinity, alignment: .trailing)
-                    .accessibilityLabel("Piste suivante")
-                    .accessibilityHint("Passe à la piste suivante")
+                    .accessibilityLabel(AppStrings.Game.nextTrackLabel)
+                    .accessibilityHint(AppStrings.Game.nextTrackHint)
                 } else {
                     Button(AppStrings.Game.finish) {
                         let result = engine.buildPodiumResult()
@@ -270,8 +270,8 @@ struct GameView: View {
                     .frame(width: 90, height: 44)
                     .glassEffect(in: Capsule())
                     .frame(maxWidth: .infinity, alignment: .trailing)
-                    .accessibilityLabel("Voir le classement")
-                    .accessibilityHint("Affiche le podium et termine la partie")
+                    .accessibilityLabel(AppStrings.Game.viewPodium)
+                    .accessibilityHint(AppStrings.Game.viewPodiumHint)
                 }
             }
         }
@@ -453,8 +453,8 @@ struct PlayerTile: View {
                     ConfettiView(isActive: $showConfetti)
                 }
             }
-            .accessibilityLabel("Joueur \(name), \(score) points")
-            .accessibilityHint("Double-tap pour ajouter un point. Appui long pour retirer un point.")
+            .accessibilityLabel(AppStrings.Game.playerTileLabel(name: name, score: score))
+            .accessibilityHint(AppStrings.Game.playerTileHint)
             .accessibilityAddTraits(.isButton)
             .onLongPressGesture(minimumDuration: 0.5, maximumDistance: .infinity, pressing: { pressing in
                 isPressed = pressing

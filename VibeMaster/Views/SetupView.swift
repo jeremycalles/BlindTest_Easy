@@ -28,15 +28,15 @@ struct SetupView: View {
     var body: some View {
         Group {
             if isLoading {
-                ContentUnavailableView("Chargement…", systemImage: "arrow.triangle.2.circlepath")
+                ContentUnavailableView(AppStrings.Setup.loading, systemImage: "arrow.triangle.2.circlepath")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if let error = loadError {
                 ContentUnavailableView {
-                    Label("Erreur", systemImage: "exclamationmark.triangle")
+                    Label(AppStrings.Setup.errorTitle, systemImage: "exclamationmark.triangle")
                 } description: {
                     Text(error)
                 } actions: {
-                    Button("Réessayer") {
+                    Button(AppStrings.Common.retry) {
                         loadError = nil
                         isLoading = true
                         Task {
@@ -45,7 +45,7 @@ struct SetupView: View {
                                 tracks = loaded
                                 numberOfSongs = loaded.isEmpty ? 1 : loaded.count
                                 isLoading = false
-                                if loaded.isEmpty { loadError = "Aucune piste" }
+                                if loaded.isEmpty { loadError = AppStrings.Setup.noTracks }
                             }
                         }
                     }
@@ -55,12 +55,12 @@ struct SetupView: View {
                 formContent
             }
         }
-        .navigationTitle("Configuration")
+        .navigationTitle(AppStrings.Setup.title)
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             if onCancel != nil {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Annuler") {
+                    Button(AppStrings.Common.cancel) {
                         onCancel?()
                     }
                 }
@@ -84,7 +84,7 @@ struct SetupView: View {
                         tracks = loaded
                         numberOfSongs = loaded.isEmpty ? 1 : loaded.count
                         isLoading = false
-                        if loaded.isEmpty { loadError = "Aucune piste" }
+                                if loaded.isEmpty { loadError = AppStrings.Setup.noTracks }
                     }
                 }
             }
@@ -93,10 +93,10 @@ struct SetupView: View {
 
     @ViewBuilder private var formContent: some View {
         List {
-            Section("Joueurs") {
+            Section(AppStrings.Setup.playersSection) {
                 ForEach(Array(playerNames.enumerated()), id: \.offset) { index, name in
                     HStack {
-                        TextField("Joueur \(index + 1)", text: $playerNames[index])
+                        TextField(AppStrings.Setup.playerPlaceholder(index + 1), text: $playerNames[index])
                             .textInputAutocapitalization(.words)
                             .focused($focusedPlayerIndex, equals: index)
                         if playerNames.count > 2 {
@@ -111,20 +111,20 @@ struct SetupView: View {
                 Button {
                     playerNames.append("")
                 } label: {
-                    Label("Ajouter un joueur", systemImage: "plus.circle")
+                    Label(AppStrings.Setup.addPlayer, systemImage: "plus.circle")
                 }
             }
-            Section("Timer (secondes)") {
+            Section(AppStrings.Setup.timerSection) {
                 HStack {
-                    Text("\(Int(timerSeconds)) s")
+                    Text(AppStrings.Setup.timerSeconds(Int(timerSeconds)))
                         .fontWeight(.medium)
                     Slider(value: $timerSeconds, in: 5...30, step: 1)
                 }
             }
             if !tracks.isEmpty {
-                Section("Nombre de pistes") {
+                Section(AppStrings.Setup.tracksCountSection) {
                     HStack {
-                        Text("\(numberOfSongs) / \(tracks.count)")
+                        Text(AppStrings.Setup.tracksCountValue(current: numberOfSongs, total: tracks.count))
                             .fontWeight(.medium)
                         Slider(
                             value: Binding(
@@ -137,11 +137,11 @@ struct SetupView: View {
                     }
                 }
             }
-            Section("Mode MC") {
-                Toggle("Le MC joue", isOn: $mcPlaysMode)
+            Section(AppStrings.Setup.mcModeSection) {
+                Toggle(AppStrings.Setup.mcPlaysToggle, isOn: $mcPlaysMode)
             }
             Section {
-                Button("Lancer la partie") {
+                Button(AppStrings.Setup.startGame) {
                     startGame()
                 }
                 .fontWeight(.semibold)

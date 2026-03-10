@@ -48,13 +48,13 @@ struct PodiumView: View {
                 VStack(spacing: 24) {
                     // Title block
                     VStack(spacing: 8) {
-                        Text("RÉSULTATS ÉPIQUES")
+                        Text(AppStrings.Podium.epicResults)
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .tracking(1.2)
                             .foregroundStyle(.white.opacity(0.95))
 
-                        Text("Et le BlindTest Easy est...")
+                        Text(AppStrings.Podium.subtitle)
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundStyle(.white)
@@ -82,7 +82,7 @@ struct PodiumView: View {
 
                     // Action buttons
                     VStack(spacing: 12) {
-                        Button("Une nouvelle partie!") {
+                        Button(AppStrings.Podium.newGame) {
                             HapticManager.medium()
                             path = [.dashboard]
                         }
@@ -140,7 +140,7 @@ struct PodiumView: View {
                 .fontWeight(.bold)
                 .foregroundStyle(.white)
 
-            Text("\(player.score) pts")
+            Text(AppStrings.Podium.scoreDisplay(player.score))
                 .font(.title2)
                 .fontWeight(.bold)
                 .fontDesign(.rounded)

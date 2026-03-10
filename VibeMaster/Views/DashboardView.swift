@@ -233,7 +233,7 @@ struct PlaylistRowView: View {
                     .font(.headline)
                     .lineLimit(1)
                 if let n = item.nb_tracks {
-                    Text("\(n) titres")
+                    Text(AppStrings.Dashboard.trackCount(n))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -272,7 +272,7 @@ struct DeezerAttributionView: View {
         .foregroundStyle(.secondary)
         .frame(maxWidth: .infinity)
         .padding(.vertical, 8)
-        .accessibilityLabel("Powered by Deezer")
-        .accessibilityHint("Ouvre le site Deezer")
+        .accessibilityLabel(AppStrings.Splash.poweredByDeezer)
+        .accessibilityHint(AppStrings.Dashboard.deezerAccessibilityHint)
     }
 }

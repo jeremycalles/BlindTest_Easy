@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 90;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -59,11 +59,9 @@
 /* Begin PBXFrameworksBuildPhase section */
 		F0030001 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				F0010013 /* VibeMasterCore in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -165,8 +163,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			name = VibeMaster;
 			packageProductDependencies = (
 				F00PACK1 /* VibeMasterCore */,
@@ -191,8 +187,7 @@
 				};
 			};
 			buildConfigurationList = F0060001 /* Build configuration list for PBXProject "VibeMaster" */;
-			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = fr;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -203,6 +198,7 @@
 			packageReferences = (
 				F00PKG01 /* XCLocalSwiftPackageReference "VibeMasterCore" */,
 			);
+			preferredProjectObjectVersion = 90;
 			productRefGroup = F0040002 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -215,7 +211,6 @@
 /* Begin PBXResourcesBuildPhase section */
 		F0050004 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				F0010010 /* MockData.json in Resources */,
 				F0010011 /* Assets.xcassets in Resources */,
@@ -224,14 +219,12 @@
 				F0010015 /* chime_high.wav in Resources */,
 				F0010016 /* applause.wav in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F0050002 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				F0010001 /* VibeMasterApp.swift in Sources */,
 				F0010018 /* AppStrings.swift in Sources */,
@@ -249,12 +242,11 @@
 				F001000F /* HapticManager.swift in Sources */,
 				F0010012 /* LastGameState.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		F0080001 /* Debug */ = {
+		F0080001 /* Debug configuration for PBXProject "VibeMaster" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -320,7 +312,7 @@
 			};
 			name = Debug;
 		};
-		F0080002 /* Release */ = {
+		F0080002 /* Release configuration for PBXProject "VibeMaster" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -379,13 +371,13 @@
 			};
 			name = Release;
 		};
-		F0080003 /* Debug */ = {
+		F0080003 /* Debug configuration for PBXNativeTarget "VibeMaster" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 73Y2U9Q7Q7;
 				ENABLE_PREVIEWS = YES;
@@ -403,7 +395,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blindtesteasy.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -414,14 +406,14 @@
 			};
 			name = Debug;
 		};
-		F0080004 /* Release */ = {
+		F0080004 /* Release configuration for PBXNativeTarget "VibeMaster" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 73Y2U9Q7Q7;
 				ENABLE_PREVIEWS = YES;
@@ -439,7 +431,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blindtesteasy.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -457,19 +449,17 @@
 		F0060001 /* Build configuration list for PBXProject "VibeMaster" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F0080001 /* Debug */,
-				F0080002 /* Release */,
+				F0080001 /* Debug configuration for PBXProject "VibeMaster" */,
+				F0080002 /* Release configuration for PBXProject "VibeMaster" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		F0060003 /* Build configuration list for PBXNativeTarget "VibeMaster" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F0080003 /* Debug */,
-				F0080004 /* Release */,
+				F0080003 /* Debug configuration for PBXNativeTarget "VibeMaster" */,
+				F0080004 /* Release configuration for PBXNativeTarget "VibeMaster" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
