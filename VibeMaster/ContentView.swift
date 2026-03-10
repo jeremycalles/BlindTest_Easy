@@ -16,6 +16,7 @@ enum AppDestination: Hashable {
 
 struct ContentView: View {
     @State private var path: [AppDestination] = []
+    @Environment(\.audioPlaybackService) private var audioPlaybackService
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -25,7 +26,7 @@ struct ContentView: View {
                     case .dashboard:
                         DashboardView(path: $path)
                     case .game(let config):
-                        GameView(config: config, path: $path)
+                        GameView(config: config, path: $path, audio: audioPlaybackService)
                     case .podium(let result):
                         PodiumView(results: result, path: $path)
                     }

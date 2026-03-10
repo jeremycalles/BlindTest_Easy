@@ -94,7 +94,9 @@ actor DeezerAPIService {
 
     func chartPlaylists() async throws -> [DeezerPlaylistItem] {
         if let cached = chartCache, cached.1 > Date() { return cached.0 }
-        let url = URL(string: "\(base)/chart/0/playlists")!
+        guard let url = URL(string: "\(base)/chart/0/playlists") else {
+            throw DeezerAPIError.invalidURL
+        }
         let (data, resp) = try await deezerSession.data(from: url)
         if let http = resp as? HTTPURLResponse, http.statusCode != 200 {
             throw DeezerAPIError.serverError(http.statusCode)
@@ -108,8 +110,9 @@ actor DeezerAPIService {
     func searchPlaylists(query: String) async throws -> [DeezerPlaylistItem] {
         let key = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         if let cached = searchCache[key], cached.1 > Date() { return cached.0 }
-        guard let encoded = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let url = URL(string: "\(base)/search/playlist?q=\(encoded)") else {
+        var components = URLComponents(string: "\(base)/search/playlist")
+        components?.queryItems = [URLQueryItem(name: "q", value: query.trimmingCharacters(in: .whitespacesAndNewlines))]
+        guard let url = components?.url else {
             throw DeezerAPIError.invalidURL
         }
         let (data, resp) = try await deezerSession.data(from: url)
@@ -124,7 +127,9 @@ actor DeezerAPIService {
 
     func playlistDetail(id: Int) async throws -> [Track] {
         if let cached = playlistDetailCache[id], cached.1 > Date() { return cached.0 }
-        let url = URL(string: "\(base)/playlist/\(id)")!
+        guard let url = URL(string: "\(base)/playlist/\(id)") else {
+            throw DeezerAPIError.invalidURL
+        }
         let (data, resp) = try await deezerSession.data(from: url)
         if let http = resp as? HTTPURLResponse, http.statusCode != 200 {
             throw DeezerAPIError.serverError(http.statusCode)

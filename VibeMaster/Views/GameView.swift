@@ -13,12 +13,12 @@ struct GameView: View {
     @State private var showStopGameConfirmation = false
     @State private var timerBounceScale: CGFloat = 1.0
 
-    init(config: GameConfig, path: Binding<[AppDestination]>) {
+    init(config: GameConfig, path: Binding<[AppDestination]>, audio: AudioPlaybackProtocol) {
         self.config = config
         _path = path
         _engine = StateObject(wrappedValue: GameEngine(
             config: config,
-            audio: AudioPlaybackService.shared,
+            audio: audio,
             onTimerEnd: { HapticManager.timerEnd() },
             onTimerTick: { _ in HapticManager.timerTick() }
         ))
@@ -71,15 +71,17 @@ struct GameView: View {
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                 }
+                .accessibilityLabel("Arrêter la partie")
+                .accessibilityHint("Affiche une confirmation pour quitter la partie en cours")
             }
         }
-        .confirmationDialog("Arrêter la partie ?", isPresented: $showStopGameConfirmation) {
-            Button("Annuler", role: .cancel) {}
-            Button("Arrêter la partie", role: .destructive) {
+        .confirmationDialog(AppStrings.Game.stopTitle, isPresented: $showStopGameConfirmation) {
+            Button(AppStrings.Common.cancel, role: .cancel) {}
+            Button(AppStrings.Game.stopButton, role: .destructive) {
                 path = [.dashboard]
             }
         } message: {
-            Text("La partie en cours sera abandonnée.")
+            Text(AppStrings.Game.stopMessage)
         }
         .onAppear {
             engine.startRound()
@@ -216,7 +218,7 @@ struct GameView: View {
     @ViewBuilder
     private var timerStripContent: some View {
         if engine.roundEnded {
-            Text("TEMPS ÉCOULÉ")
+            Text(AppStrings.Game.timeUp)
                 .font(.caption2)
                 .fontWeight(.semibold)
                 .tracking(1.5)
@@ -243,10 +245,12 @@ struct GameView: View {
                     .foregroundStyle(Color(red: 1, green: 0.4, blue: 0.2))
             }
             .frame(maxWidth: .infinity)
+            .accessibilityLabel(engine.isPlaying ? "Pause" : "Lecture")
+            .accessibilityHint("Met en pause ou reprend l’extrait musical")
 
             if engine.roundEnded {
                 if engine.currentTrackIndex + 1 < config.tracks.count {
-                    Button("Suivant") {
+                    Button(AppStrings.Game.next) {
                         engine.nextTrack()
                         HapticManager.medium()
                     }
@@ -254,8 +258,10 @@ struct GameView: View {
                     .frame(width: 90, height: 44)
                     .glassEffect(in: Capsule())
                     .frame(maxWidth: .infinity, alignment: .trailing)
+                    .accessibilityLabel("Piste suivante")
+                    .accessibilityHint("Passe à la piste suivante")
                 } else {
-                    Button("Fin") {
+                    Button(AppStrings.Game.finish) {
                         let result = engine.buildPodiumResult()
                         path.append(.podium(result))
                         HapticManager.medium()
@@ -264,6 +270,8 @@ struct GameView: View {
                     .frame(width: 90, height: 44)
                     .glassEffect(in: Capsule())
                     .frame(maxWidth: .infinity, alignment: .trailing)
+                    .accessibilityLabel("Voir le classement")
+                    .accessibilityHint("Affiche le podium et termine la partie")
                 }
             }
         }
@@ -445,6 +453,9 @@ struct PlayerTile: View {
                     ConfettiView(isActive: $showConfetti)
                 }
             }
+            .accessibilityLabel("Joueur \(name), \(score) points")
+            .accessibilityHint("Double-tap pour ajouter un point. Appui long pour retirer un point.")
+            .accessibilityAddTraits(.isButton)
             .onLongPressGesture(minimumDuration: 0.5, maximumDistance: .infinity, pressing: { pressing in
                 isPressed = pressing
                 if pressing { longPressConsumed = false }

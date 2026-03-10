@@ -50,10 +50,13 @@ public final class GameEngine: ObservableObject {
         startTimer()
     }
 
+    /// Timer tick interval: 0.1 seconds (10 ticks per second).
+    private static let timerStepIntervalNanoseconds: UInt64 = 100_000_000
+
     private func startTimer() {
         timerTask?.cancel()
         let totalSteps = config.timerSeconds * 10
-        let stepNanoseconds: UInt64 = 100_000_000
+        let stepNanoseconds = Self.timerStepIntervalNanoseconds
         var previousRemaining = config.timerSeconds
         timerTask = Task { @MainActor in
             for step in 0..<totalSteps {

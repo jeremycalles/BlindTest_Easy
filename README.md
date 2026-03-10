@@ -23,10 +23,8 @@ iOS music quiz (blind test) app with a French UI. The Xcode project and targets 
 
 ## Testing
 
-Run the regression test suite from Xcode:
-
-- **Product > Test** (or **⌘U**).
-- The shared scheme **VibeMaster** builds the app and runs the **VibeMasterTests** unit tests (GameEngine scoring, podium, flow with a mock audio service).
+- **VibeMasterCore package:** Run `swift test --package-path VibeMasterCore` from the repo root. The **VibeMasterCoreTests** target tests `GameEngine` (scoring, podium, round flow) with a mock audio service.
+- **From Xcode:** Open `VibeMaster.xcodeproj`, then **Product > Test** (⌘U). You can also open `VibeMasterCore` as a package and run its tests there.
 
 ## Deploy to App Store Connect
 

@@ -27,68 +27,10 @@ struct DashboardView: View {
     var body: some View {
         List {
             if !isSearching {
-                Section("Mes Blind Tests") {
-                    if favoritePlaylists.isEmpty {
-                        Text("Ajoutez des playlists en favori pour les retrouver ici.")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        ForEach(favoritePlaylists, id: \.id) { item in
-                            PlaylistRowView(item: item, isFavorite: true, onAdd: {}, onRemove: {
-                                FavoritesManager.shared.remove(id: item.id)
-                                HapticManager.light()
-                                loadFavorites()
-                            }, onTap: { selectPlaylist(id: item.id) })
-                        }
-                    }
-                }
-                Section("Top playlists") {
-                    if isLoadingChart {
-                        ProgressView()
-                            .frame(maxWidth: .infinity)
-                    } else if let msg = errorMessage {
-                        Text(msg)
-                        Button("Réessayer") { loadChart() }
-                            .buttonStyle(.bordered)
-                    } else {
-                        ForEach(chartPlaylists.prefix(10), id: \.id) { item in
-                            PlaylistRowView(item: item, isFavorite: FavoritesManager.shared.contains(id: item.id)) {
-                                FavoritesManager.shared.add(item)
-                                HapticManager.light()
-                                loadFavorites()
-                            } onRemove: {
-                                FavoritesManager.shared.remove(id: item.id)
-                                HapticManager.light()
-                                loadFavorites()
-                            } onTap: { selectPlaylist(id: item.id) }
-                        }
-                    }
-                }
-                
+                favoritesSection
+                topPlaylistsSection
             } else {
-                Section("Résultats") {
-                    if isLoadingSearch {
-                        ProgressView()
-                            .frame(maxWidth: .infinity)
-                    } else if let msg = errorMessage {
-                        Text(msg)
-                        Button("Réessayer") {
-                            errorMessage = nil
-                            Task { await runSearch() }
-                        }
-                        .buttonStyle(.bordered)
-                    } else if searchResults.isEmpty {
-                        Text("Aucun résultat")
-                            .foregroundStyle(.secondary)
-                    } else {
-                        ForEach(searchResults, id: \.id) { item in
-                            PlaylistRowView(item: item, isFavorite: FavoritesManager.shared.contains(id: item.id), onAdd: {
-                                FavoritesManager.shared.add(item)
-                                HapticManager.light()
-                            }, onRemove: { FavoritesManager.shared.remove(id: item.id); loadFavorites() }, onTap: { selectPlaylist(id: item.id) })
-                        }
-                    }
-                }
+                searchResultsSection
             }
             Section {
                 DeezerAttributionView()
@@ -100,9 +42,9 @@ struct DashboardView: View {
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
         .glassEffect(in: Rectangle())
-        .navigationTitle("Accueil")
+        .navigationTitle(AppStrings.Dashboard.home)
         .navigationBarTitleDisplayMode(.large)
-        .searchable(text: $searchText, prompt: "Rechercher des playlists")
+        .searchable(text: $searchText, prompt: AppStrings.Dashboard.searchPlaylistsPrompt)
         .onChange(of: searchText) { _, newValue in
             let t = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
             if t.count >= 3 {
@@ -125,9 +67,80 @@ struct DashboardView: View {
             loadChart()
             loadFavorites()
         }
-            }
+    }
 
-    private static let quotaExceededMessage = "Quota limit exceeded. Réessayez plus tard."
+    // MARK: - Section subviews
+
+    private var favoritesSection: some View {
+        Section(AppStrings.Dashboard.myBlindTests) {
+            if favoritePlaylists.isEmpty {
+                Text(AppStrings.Dashboard.addFavoritesHint)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(favoritePlaylists, id: \.id) { item in
+                    PlaylistRowView(item: item, isFavorite: true, onAdd: {}, onRemove: {
+                        FavoritesManager.shared.remove(id: item.id)
+                        HapticManager.light()
+                        loadFavorites()
+                    }, onTap: { selectPlaylist(id: item.id) })
+                }
+            }
+        }
+    }
+
+    private var topPlaylistsSection: some View {
+        Section(AppStrings.Dashboard.topPlaylists) {
+            if isLoadingChart {
+                ProgressView()
+                    .frame(maxWidth: .infinity)
+            } else if let msg = errorMessage {
+                Text(msg)
+                Button(AppStrings.Common.retry) { loadChart() }
+                    .buttonStyle(.bordered)
+            } else {
+                ForEach(chartPlaylists.prefix(10), id: \.id) { item in
+                    PlaylistRowView(item: item, isFavorite: FavoritesManager.shared.contains(id: item.id)) {
+                        FavoritesManager.shared.add(item)
+                        HapticManager.light()
+                        loadFavorites()
+                    } onRemove: {
+                        FavoritesManager.shared.remove(id: item.id)
+                        HapticManager.light()
+                        loadFavorites()
+                    } onTap: { selectPlaylist(id: item.id) }
+                }
+            }
+        }
+    }
+
+    private var searchResultsSection: some View {
+        Section(AppStrings.Dashboard.results) {
+            if isLoadingSearch {
+                ProgressView()
+                    .frame(maxWidth: .infinity)
+            } else if let msg = errorMessage {
+                Text(msg)
+                Button(AppStrings.Common.retry) {
+                    errorMessage = nil
+                    Task { await runSearch() }
+                }
+                .buttonStyle(.bordered)
+            } else if searchResults.isEmpty {
+                Text(AppStrings.Dashboard.noResults)
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(searchResults, id: \.id) { item in
+                    PlaylistRowView(item: item, isFavorite: FavoritesManager.shared.contains(id: item.id), onAdd: {
+                        FavoritesManager.shared.add(item)
+                        HapticManager.light()
+                    }, onRemove: { FavoritesManager.shared.remove(id: item.id); loadFavorites() }, onTap: { selectPlaylist(id: item.id) })
+                }
+            }
+        }
+    }
+
+    private static var quotaExceededMessage: String { AppStrings.Errors.quotaExceeded }
 
     private func loadChart() {
         isLoadingChart = true
@@ -144,12 +157,12 @@ struct DashboardView: View {
                 await MainActor.run {
                     errorMessage = err == .quotaExceeded
                         ? Self.quotaExceededMessage
-                        : "Impossible de charger les playlists. Vérifiez votre connexion."
+                        : AppStrings.Errors.loadPlaylists
                     isLoadingChart = false
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = "Impossible de charger les playlists. Vérifiez votre connexion."
+                    errorMessage = AppStrings.Errors.loadPlaylists
                     isLoadingChart = false
                 }
             }
@@ -173,13 +186,13 @@ struct DashboardView: View {
             await MainActor.run {
                 searchResults = []
                 isLoadingSearch = false
-                errorMessage = err == .quotaExceeded ? Self.quotaExceededMessage : "Impossible de charger les résultats."
+                errorMessage = err == .quotaExceeded ? Self.quotaExceededMessage : AppStrings.Errors.loadResults
             }
         } catch {
             await MainActor.run {
                 searchResults = []
                 isLoadingSearch = false
-                errorMessage = "Impossible de charger les résultats."
+                errorMessage = AppStrings.Errors.loadResults
             }
         }
     }
@@ -193,10 +206,10 @@ struct DashboardView: View {
                 }
             } catch let err as DeezerAPIError {
                 await MainActor.run {
-                    errorMessage = err == .quotaExceeded ? Self.quotaExceededMessage : "Impossible de charger les titres."
+                    errorMessage = err == .quotaExceeded ? Self.quotaExceededMessage : AppStrings.Errors.loadTracks
                 }
             } catch {
-                await MainActor.run { errorMessage = "Impossible de charger les titres." }
+                await MainActor.run { errorMessage = AppStrings.Errors.loadTracks }
             }
         }
     }
@@ -244,11 +257,22 @@ struct PlaylistRowView: View {
 
 // MARK: - Deezer attribution (required by Deezer API terms: https://developers.deezer.com/guidelines/logo)
 struct DeezerAttributionView: View {
+    private static let deezerURL = URL(string: "https://www.deezer.com")
+
     var body: some View {
-        Link("Powered by Deezer", destination: URL(string: "https://www.deezer.com")!)
-            .font(.caption)
-            .foregroundStyle(.secondary)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 8)
+        Group {
+            if let url = Self.deezerURL {
+                Link(AppStrings.Splash.poweredByDeezer, destination: url)
+            } else {
+                Text(AppStrings.Splash.poweredByDeezer)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .font(.caption)
+        .foregroundStyle(.secondary)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+        .accessibilityLabel("Powered by Deezer")
+        .accessibilityHint("Ouvre le site Deezer")
     }
 }
