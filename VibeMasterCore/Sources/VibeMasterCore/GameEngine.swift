@@ -55,22 +55,26 @@ public final class GameEngine: ObservableObject {
 
     private func startTimer() {
         timerTask?.cancel()
-        let totalSteps = config.timerSeconds * 10
-        let stepNanoseconds = Self.timerStepIntervalNanoseconds
-        var previousRemaining = config.timerSeconds
         timerTask = Task { @MainActor in
-            for step in 0..<totalSteps {
-                if Task.isCancelled { break }
-                try? await Task.sleep(nanoseconds: stepNanoseconds)
-                if Task.isCancelled { break }
-                timeRemaining = max(0, config.timerSeconds - (step + 1) / 10)
-                if (1...3).contains(timeRemaining) && timeRemaining != previousRemaining {
-                    onTimerTick(timeRemaining)
+            var stepsTaken = (config.timerSeconds - timeRemaining) * 10
+            let totalSteps = config.timerSeconds * 10
+
+            while stepsTaken < totalSteps {
+                try? await Task.sleep(nanoseconds: Self.timerStepIntervalNanoseconds)
+                if Task.isCancelled { return }
+
+                stepsTaken += 1
+                let newRemaining = max(0, config.timerSeconds - stepsTaken / 10)
+
+                if (1...3).contains(newRemaining) && newRemaining != timeRemaining {
+                    onTimerTick(newRemaining)
                 }
-                previousRemaining = timeRemaining
+
+                timeRemaining = newRemaining
+
                 if timeRemaining == 0 {
                     reveal()
-                    break
+                    return
                 }
             }
         }
@@ -97,7 +101,7 @@ public final class GameEngine: ObservableObject {
     }
 
     public func addPoint(playerName: String) {
-        scores[playerName, default: 0] += 1
+        addPoints(1, playerName: playerName)
     }
 
     public func addPoints(_ value: Int, playerName: String) {

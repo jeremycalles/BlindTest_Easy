@@ -83,11 +83,11 @@ actor DeezerAPIService {
 
     private func checkQuotaError(data: Data) throws {
         guard let errResp = try? JSONDecoder().decode(DeezerAPIErrorResponse.self, from: data),
-              let msg = errResp.error?.message?.lowercased() else { return }
-        if msg.contains("quota") || msg.contains("limit exceeded") {
-            throw DeezerAPIError.quotaExceeded
-        }
-        if errResp.error?.code == 4 {
+              let err = errResp.error else { return }
+
+        let msg = err.message?.lowercased() ?? ""
+        if msg.contains("quota") || msg.contains("limit exceeded") || err.code == 4 {
+            print("[DeezerAPI] Quota exceeded error detected")
             throw DeezerAPIError.quotaExceeded
         }
     }
@@ -99,6 +99,7 @@ actor DeezerAPIService {
         }
         let (data, resp) = try await deezerSession.data(from: url)
         if let http = resp as? HTTPURLResponse, http.statusCode != 200 {
+            print("[DeezerAPI] Chart error: HTTP \(http.statusCode)")
             throw DeezerAPIError.serverError(http.statusCode)
         }
         try checkQuotaError(data: data)
@@ -117,6 +118,7 @@ actor DeezerAPIService {
         }
         let (data, resp) = try await deezerSession.data(from: url)
         if let http = resp as? HTTPURLResponse, http.statusCode != 200 {
+            print("[DeezerAPI] Search error: HTTP \(http.statusCode)")
             throw DeezerAPIError.serverError(http.statusCode)
         }
         try checkQuotaError(data: data)
@@ -132,6 +134,7 @@ actor DeezerAPIService {
         }
         let (data, resp) = try await deezerSession.data(from: url)
         if let http = resp as? HTTPURLResponse, http.statusCode != 200 {
+            print("[DeezerAPI] Playlist detail error: HTTP \(http.statusCode)")
             throw DeezerAPIError.serverError(http.statusCode)
         }
         try checkQuotaError(data: data)
