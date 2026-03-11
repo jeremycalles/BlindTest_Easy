@@ -6,6 +6,11 @@
 import SwiftUI
 import VibeMasterCore
 
+struct SetupItem: Identifiable, Hashable {
+    let id = UUID()
+    let tracks: [Track]
+}
+
 struct DashboardView: View {
     @Binding var path: [AppDestination]
     @State private var searchText = ""
@@ -18,11 +23,6 @@ struct DashboardView: View {
     @State private var errorMessage: String?
     @State private var setupItem: SetupItem?
     @State private var searchTask: Task<Void, Never>?
-
-    private struct SetupItem: Identifiable, Hashable {
-        let id = UUID()
-        let tracks: [Track]
-    }
 
     var body: some View {
         List {

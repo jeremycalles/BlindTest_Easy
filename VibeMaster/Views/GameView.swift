@@ -58,7 +58,7 @@ struct GameView: View {
                 .padding(.top, trackHeaderTop)
                 .padding(.leading, trackHeaderLeading)
             if let track = engine.currentTrack {
-                trackCard(track)
+                TrackCardView(track: track, trackCardHeight: trackCardHeight, mcPlaysMode: config.mcPlaysMode, isRevealed: engine.isRevealed)
                     .padding(.top, trackCardTop)
             }
         }
@@ -120,39 +120,6 @@ struct GameView: View {
             .foregroundStyle(.secondary)
     }
 
-    private func trackCard(_ track: Track) -> some View {
-        HStack(spacing: 12) {
-            AsyncImage(url: URL(string: track.album.cover_medium)) { image in image.resizable() }
-                placeholder: { Color.gray.opacity(0.3) }
-                .frame(width: 56, height: 56)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-            VStack(alignment: .leading, spacing: 4) {
-                Text(track.title)
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                Text(track.artist.name)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-            }
-            Spacer()
-        }
-        .frame(height: trackCardHeight)
-        .padding(12)
-        .glassEffect(in: RoundedRectangle(cornerRadius: 12))
-        .overlay {
-            if config.mcPlaysMode && !engine.isRevealed {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.systemBackground).opacity(0.95))
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .glassEffect(in: RoundedRectangle(cornerRadius: 12))
-            }
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-    }
 
     private func playerGrid(availableHeight: CGFloat) -> some View {
         let columns = [GridItem(.flexible()), GridItem(.flexible())]
@@ -314,6 +281,47 @@ private let confettiColors: [Color] = [
     Color(red: 1, green: 0.4, blue: 0.7),
     Color(red: 0.9, green: 0.5, blue: 1)
 ]
+
+struct TrackCardView: View {
+    let track: Track
+    let trackCardHeight: CGFloat
+    let mcPlaysMode: Bool
+    let isRevealed: Bool
+
+    var body: some View {
+        HStack(spacing: 12) {
+            AsyncImage(url: URL(string: track.album.cover_medium)) { image in image.resizable() }
+                placeholder: { Color.gray.opacity(0.3) }
+                .frame(width: 56, height: 56)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+            VStack(alignment: .leading, spacing: 4) {
+                Text(track.title)
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                Text(track.artist.name)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+            }
+            Spacer()
+        }
+        .frame(height: trackCardHeight)
+        .padding(12)
+        .glassEffect(in: RoundedRectangle(cornerRadius: 12))
+        .overlay {
+            if mcPlaysMode && !isRevealed {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color(.systemBackground).opacity(0.95))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .glassEffect(in: RoundedRectangle(cornerRadius: 12))
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+}
 
 struct ConfettiView: View {
     @Binding var isActive: Bool

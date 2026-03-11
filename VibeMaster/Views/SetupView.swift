@@ -84,7 +84,7 @@ struct SetupView: View {
                         tracks = loaded
                         numberOfSongs = loaded.isEmpty ? 1 : loaded.count
                         isLoading = false
-                                if loaded.isEmpty { loadError = AppStrings.Setup.noTracks }
+                        if loaded.isEmpty { loadError = AppStrings.Setup.noTracks }
                     }
                 }
             }
