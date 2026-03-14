@@ -63,7 +63,7 @@ struct DashboardView: View {
         .safeAreaInset(edge: .bottom, spacing: 0) { Color.clear.frame(height: 56) }
         .preferredColorScheme(.dark)
         .navigationTitle(AppStrings.Dashboard.home)
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $searchText, prompt: AppStrings.Dashboard.searchPlaylistsPrompt)
         .onChange(of: searchText) { _, newValue in
             let t = newValue.trimmingCharacters(in: .whitespacesAndNewlines)

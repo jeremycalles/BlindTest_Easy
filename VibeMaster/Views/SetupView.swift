@@ -58,13 +58,8 @@ struct SetupView: View {
                 }
             }
         }
+        .navigationTitle(AppStrings.Setup.title)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Text(AppStrings.Setup.title)
-                    .font(.headline)
-            }
-        }
         .onAppear {
             let lastNames = LastGameState.loadPlayerNames()
             if lastNames.count >= 2 {
