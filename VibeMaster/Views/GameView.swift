@@ -84,9 +84,11 @@ struct GameView: View {
             Text(AppStrings.Game.stopMessage)
         }
         .onAppear {
+            UIApplication.shared.isIdleTimerDisabled = true
             engine.startRound()
         }
         .onDisappear {
+            UIApplication.shared.isIdleTimerDisabled = false
             engine.togglePlayPause()
         }
     }
