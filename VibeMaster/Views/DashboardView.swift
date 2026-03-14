@@ -24,25 +24,44 @@ struct DashboardView: View {
         let tracks: [Track]
     }
 
+    private let rowCornerRadius: CGFloat = 12
+
     var body: some View {
-        List {
-            if !isSearching {
-                favoritesSection
-                topPlaylistsSection
-            } else {
-                searchResultsSection
+        ZStack {
+            // Dark glass-style background (matches screenshot)
+            LinearGradient(
+                colors: [
+                    Color(red: 0.08, green: 0.08, blue: 0.14),
+                    Color(red: 0.05, green: 0.05, blue: 0.10),
+                    Color(red: 0.02, green: 0.02, blue: 0.06)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+
+            List {
+                if !isSearching {
+                    favoritesSection
+                    topPlaylistsSection
+                } else {
+                    searchResultsSection
+                }
+                Section {
+                    DeezerAttributionView(forLightBackground: false)
+                }
             }
-            Section {
-                DeezerAttributionView()
-            }
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+            .listRowBackground(glassRowBackground)
         }
         .navigationDestination(item: $setupItem) { item in
             SetupView(path: $path, initialTracks: item.tracks, onCancel: { setupItem = nil })
         }
-        .listStyle(.insetGrouped)
-        .scrollContentBackground(.hidden)
         .safeAreaInset(edge: .bottom, spacing: 0) { Color.clear.frame(height: 56) }
-        .glassEffect(in: Rectangle())
+        .preferredColorScheme(.dark)
         .navigationTitle(AppStrings.Dashboard.home)
         .navigationBarTitleDisplayMode(.large)
         .searchable(text: $searchText, prompt: AppStrings.Dashboard.searchPlaylistsPrompt)
@@ -70,10 +89,18 @@ struct DashboardView: View {
         }
     }
 
+    private var glassRowBackground: some View {
+        Color.clear
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: 56)
+            .glassEffect(.regular, in: RoundedRectangle(cornerRadius: rowCornerRadius))
+            .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
+    }
+
     // MARK: - Section subviews
 
     private var favoritesSection: some View {
-        Section(AppStrings.Dashboard.myBlindTests) {
+        Section {
             if favoritePlaylists.isEmpty {
                 Text(AppStrings.Dashboard.addFavoritesHint)
                     .font(.subheadline)
@@ -87,16 +114,23 @@ struct DashboardView: View {
                     }, onTap: { selectPlaylist(id: item.id) })
                 }
             }
+        } header: {
+            Text(AppStrings.Dashboard.myBlindTests)
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundStyle(.primary)
+                .textCase(.uppercase)
         }
     }
 
     private var topPlaylistsSection: some View {
-        Section(AppStrings.Dashboard.topPlaylists) {
+        Section {
             if isLoadingChart {
                 ProgressView()
                     .frame(maxWidth: .infinity)
             } else if let msg = errorMessage {
                 Text(msg)
+                    .foregroundStyle(.secondary)
                 Button(AppStrings.Common.retry) { loadChart() }
                     .buttonStyle(.bordered)
             } else {
@@ -112,16 +146,23 @@ struct DashboardView: View {
                     } onTap: { selectPlaylist(id: item.id) }
                 }
             }
+        } header: {
+            Text(AppStrings.Dashboard.topPlaylists)
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundStyle(.primary)
+                .textCase(.uppercase)
         }
     }
 
     private var searchResultsSection: some View {
-        Section(AppStrings.Dashboard.results) {
+        Section {
             if isLoadingSearch {
                 ProgressView()
                     .frame(maxWidth: .infinity)
             } else if let msg = errorMessage {
                 Text(msg)
+                    .foregroundStyle(.secondary)
                 Button(AppStrings.Common.retry) {
                     errorMessage = nil
                     Task { await runSearch() }
@@ -138,6 +179,12 @@ struct DashboardView: View {
                     }, onRemove: { FavoritesManager.shared.remove(id: item.id); loadFavorites() }, onTap: { selectPlaylist(id: item.id) })
                 }
             }
+        } header: {
+            Text(AppStrings.Dashboard.results)
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundStyle(.primary)
+                .textCase(.uppercase)
         }
     }
 
@@ -224,33 +271,36 @@ struct PlaylistRowView: View {
     var onTap: () -> Void = {}
 
     var body: some View {
-        HStack {
+        HStack(spacing: 12) {
             AsyncImage(url: URL(string: item.picture_medium ?? "")) { image in image.resizable() }
-                placeholder: { Color.gray.opacity(0.3) }
-                .frame(width: 50, height: 50)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                placeholder: { Color.gray.opacity(0.2) }
+                .frame(width: 56, height: 56)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
             VStack(alignment: .leading, spacing: 2) {
                 Text(item.title)
                     .font(.headline)
+                    .foregroundStyle(.primary)
                     .lineLimit(1)
                 if let n = item.nb_tracks {
                     Text(AppStrings.Dashboard.trackCount(n))
-                        .font(.caption)
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
             }
-            Spacer()
-            Image(systemName: "chevron.right")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            .frame(maxWidth: .infinity, alignment: .leading)
             Button {
                 if isFavorite { onRemove() } else { onAdd() }
             } label: {
                 Image(systemName: isFavorite ? "heart.fill" : "heart")
+                    .font(.body)
+                    .foregroundStyle(isFavorite ? .red : .secondary)
             }
-            .buttonStyle(.borderless)
+            .buttonStyle(.plain)
+            Image(systemName: "chevron.right")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.tertiary)
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 8)
         .contentShape(Rectangle())
         .onTapGesture(perform: onTap)
     }
@@ -259,13 +309,15 @@ struct PlaylistRowView: View {
 // MARK: - Deezer attribution (required by Deezer API terms: https://developers.deezer.com/guidelines/logo)
 struct DeezerAttributionView: View {
     private static let deezerURL = URL(string: "https://www.deezer.com")
+    /// Use light text on dark (e.g. splash) or dark text on light (e.g. dashboard).
+    var forLightBackground: Bool = false
 
     var body: some View {
         Group {
             if let url = Self.deezerURL {
-                Link(destination: url) { DeezerAttributionBadge() }
+                Link(destination: url) { DeezerAttributionBadge(forLightBackground: forLightBackground) }
             } else {
-                DeezerAttributionBadge()
+                DeezerAttributionBadge(forLightBackground: forLightBackground)
             }
         }
         .frame(maxWidth: .infinity)
@@ -278,6 +330,8 @@ struct DeezerAttributionView: View {
 /// Compact Deezer logo + "Powered by Deezer" badge, reused on splash and dashboard.
 /// Add the official Deezer logo to Assets.xcassets/DeezerLogo.imageset to display it.
 struct DeezerAttributionBadge: View {
+    var forLightBackground: Bool = false
+
     var body: some View {
         VStack(spacing: 4) {
             if UIImage(named: "DeezerLogo") != nil {
@@ -289,7 +343,7 @@ struct DeezerAttributionBadge: View {
             }
             Text(AppStrings.Splash.poweredByDeezer)
                 .font(.caption2)
-                .foregroundStyle(.white)
+                .foregroundStyle(forLightBackground ? Color.secondary : Color.white)
         }
     }
 }
