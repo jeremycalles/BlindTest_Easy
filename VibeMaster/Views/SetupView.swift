@@ -152,6 +152,7 @@ struct SetupView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
+        .safeAreaInset(edge: .bottom, spacing: 0) { Color.clear.frame(height: 56) }
         .glassEffect(in: Rectangle())
     }
 
