@@ -53,6 +53,7 @@ enum AppStrings {
 
     enum Podium {
         static let epicResults = String(localized: "podium.epic_results")
+        static let winner = String(localized: "podium.winner")
         static let subtitle = String(localized: "podium.subtitle")
         static let pointsAbbrev = String(localized: "podium.points_abbrev")
         static func scoreDisplay(_ score: Int) -> String {

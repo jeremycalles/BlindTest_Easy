@@ -554,6 +554,22 @@
         }
       }
     },
+    "podium.winner" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Winner:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vainqueur :"
+          }
+        }
+      }
+    },
     "podium.new_game" : {
       "localizations" : {
         "en" : {
