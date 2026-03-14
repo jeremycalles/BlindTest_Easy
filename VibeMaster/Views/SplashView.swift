@@ -62,3 +62,7 @@ struct SplashView: View {
         }
     }
 }
+
+#Preview("SplashView") {
+    SplashView(path: .constant([]))
+}

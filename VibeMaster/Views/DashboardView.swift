@@ -41,6 +41,7 @@ struct DashboardView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
+        .safeAreaInset(edge: .bottom, spacing: 0) { Color.clear.frame(height: 56) }
         .glassEffect(in: Rectangle())
         .navigationTitle(AppStrings.Dashboard.home)
         .navigationBarTitleDisplayMode(.large)
@@ -275,4 +276,21 @@ struct DeezerAttributionView: View {
         .accessibilityLabel(AppStrings.Splash.poweredByDeezer)
         .accessibilityHint(AppStrings.Dashboard.deezerAccessibilityHint)
     }
+}
+
+// MARK: - Previews
+
+#Preview("DashboardView") {
+    NavigationStack {
+        DashboardView(path: .constant([]))
+    }
+}
+
+#Preview("PlaylistRowView") {
+    let item = DeezerPlaylistItem(id: 1, title: "Preview Playlist", picture_medium: nil, nb_tracks: 10)
+    return PlaylistRowView(item: item, isFavorite: false, onAdd: {}, onRemove: {}, onTap: {})
+}
+
+#Preview("DeezerAttributionView") {
+    DeezerAttributionView()
 }

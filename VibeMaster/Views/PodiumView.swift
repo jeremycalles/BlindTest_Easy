@@ -216,3 +216,24 @@ struct PodiumView: View {
         )
     }
 }
+
+// MARK: - Previews
+
+private extension PodiumView {
+    static var previewResult: PodiumResult {
+        let config = GameConfig(tracks: [], playerNames: ["Alice", "Bob"], timerSeconds: 15, mcPlaysMode: false)
+        return PodiumResult(
+            playerScores: [
+                PlayerScore(name: "Alice", score: 5),
+                PlayerScore(name: "Bob", score: 3)
+            ],
+            config: config
+        )
+    }
+}
+
+#Preview("PodiumView") {
+    NavigationStack {
+        PodiumView(results: PodiumView.previewResult, path: .constant([]))
+    }
+}

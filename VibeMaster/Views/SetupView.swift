@@ -171,3 +171,9 @@ struct SetupView: View {
         path.append(.game(config))
     }
 }
+
+#Preview("SetupView") {
+    NavigationStack {
+        SetupView(path: .constant([]), initialTracks: nil, onCancel: nil)
+    }
+}

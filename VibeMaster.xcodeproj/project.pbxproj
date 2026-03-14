@@ -452,7 +452,7 @@
 				F0080001 /* Debug configuration for PBXProject "VibeMaster" */,
 				F0080002 /* Release configuration for PBXProject "VibeMaster" */,
 			);
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		F0060003 /* Build configuration list for PBXNativeTarget "VibeMaster" */ = {
 			isa = XCConfigurationList;
@@ -460,7 +460,7 @@
 				F0080003 /* Debug configuration for PBXNativeTarget "VibeMaster" */,
 				F0080004 /* Release configuration for PBXNativeTarget "VibeMaster" */,
 			);
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 

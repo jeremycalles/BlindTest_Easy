@@ -476,3 +476,47 @@ struct PlayerTile: View {
     }
 }
 
+// MARK: - Previews
+
+private final class PreviewAudioPlayback: AudioPlaybackProtocol {
+    static func configureSession() {}
+    func load(url: String) {}
+    func play() {}
+    func pause() {}
+    func stop() {}
+    func duckAndFadeOut(duration: TimeInterval, completion: @escaping () -> Void) { completion() }
+}
+
+private extension GameView {
+    static var previewConfig: GameConfig {
+        let artist = Artist(name: "Preview Artist", picture_medium: "")
+        let album = Album(cover_medium: "https://example.com/cover.jpg")
+        let track = Track(id: 1, title: "Preview Track", preview: "", artist: artist, album: album)
+        return GameConfig(tracks: [track], playerNames: ["Alice", "Bob"], timerSeconds: 15, mcPlaysMode: false)
+    }
+}
+
+#Preview("GameView") {
+    NavigationStack {
+        GameView(config: GameView.previewConfig, path: .constant([]), audio: PreviewAudioPlayback())
+    }
+}
+
+#Preview("ConfettiView") {
+    ConfettiView(isActive: .constant(true))
+        .frame(width: 300, height: 300)
+}
+
+#Preview("PlayerTile") {
+    PlayerTile(
+        name: "Alice",
+        score: 3,
+        color: .blue,
+        iconName: "flame.fill",
+        onTap: {},
+        onDoubleTap: {},
+        onLongPress: {}
+    )
+    .frame(height: 140)
+}
+
