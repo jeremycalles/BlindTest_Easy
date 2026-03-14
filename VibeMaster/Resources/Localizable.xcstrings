@@ -586,22 +586,6 @@
         }
       }
     },
-    "podium.winner" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Winner:"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vainqueur :"
-          }
-        }
-      }
-    },
     "podium.new_game" : {
       "localizations" : {
         "en" : {
@@ -662,6 +646,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Et le BlindTest Easy est..."
+          }
+        }
+      }
+    },
+    "podium.winner" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Winner:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vainqueur :"
           }
         }
       }
@@ -751,13 +751,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "mode toggle"
+            "value" : "If MC plays, the soung name and artists are displayed only at the end of the timer."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "interrupteur mode"
+            "value" : "Si le MC joue, le titre et l’artiste ne sont affichés qu’à la fin du timer."
           }
         }
       }

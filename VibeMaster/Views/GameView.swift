@@ -179,10 +179,16 @@ struct GameView: View {
             .glassEffect(in: RoundedRectangle(cornerRadius: horizontal ? 12 : 16))
             .overlay {
                 if config.mcPlaysMode && !engine.isRevealed {
-                    RoundedRectangle(cornerRadius: horizontal ? 12 : 16)
-                        .fill(Color(.systemBackground).opacity(0.95))
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .glassEffect(in: RoundedRectangle(cornerRadius: horizontal ? 12 : 16))
+                    ZStack {
+                        RoundedRectangle(cornerRadius: horizontal ? 12 : 16)
+                            .fill(Color(.systemBackground).opacity(0.95))
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .glassEffect(in: RoundedRectangle(cornerRadius: horizontal ? 12 : 16))
+                        Image("LockIcon")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: coverSize * 0.6)
+                    }
                 }
             }
             .clipShape(RoundedRectangle(cornerRadius: horizontal ? 12 : 16))
@@ -554,6 +560,13 @@ private extension GameView {
             mcPlaysMode: false
         )
     }
+
+    static var previewConfigMCMode: GameConfig {
+        let artist = Artist(name: "Preview Artist", picture_medium: "")
+        let album = Album(cover_medium: "https://example.com/cover.jpg")
+        let track = Track(id: 1, title: "Preview Track", preview: "https://example.com/preview.mp3", artist: artist, album: album)
+        return GameConfig(tracks: [track], playerNames: ["Alice", "Bob"], timerSeconds: 15, mcPlaysMode: true)
+    }
 }
 
 #Preview("GameView") {
@@ -565,6 +578,12 @@ private extension GameView {
 #Preview("GameView 8 Players") {
     NavigationStack {
         GameView(config: GameView.previewConfig8Players, path: .constant([]), audio: PreviewAudioPlayback())
+    }
+}
+
+#Preview("GameView MC mode") {
+    NavigationStack {
+        GameView(config: GameView.previewConfigMCMode, path: .constant([]), audio: PreviewAudioPlayback())
     }
 }
 
