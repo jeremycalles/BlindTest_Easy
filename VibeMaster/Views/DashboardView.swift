@@ -263,18 +263,34 @@ struct DeezerAttributionView: View {
     var body: some View {
         Group {
             if let url = Self.deezerURL {
-                Link(AppStrings.Splash.poweredByDeezer, destination: url)
+                Link(destination: url) { DeezerAttributionBadge() }
             } else {
-                Text(AppStrings.Splash.poweredByDeezer)
-                    .foregroundStyle(.secondary)
+                DeezerAttributionBadge()
             }
         }
-        .font(.caption)
-        .foregroundStyle(.secondary)
         .frame(maxWidth: .infinity)
         .padding(.vertical, 8)
         .accessibilityLabel(AppStrings.Splash.poweredByDeezer)
         .accessibilityHint(AppStrings.Dashboard.deezerAccessibilityHint)
+    }
+}
+
+/// Compact Deezer logo + "Powered by Deezer" badge, reused on splash and dashboard.
+/// Add the official Deezer logo to Assets.xcassets/DeezerLogo.imageset to display it.
+struct DeezerAttributionBadge: View {
+    var body: some View {
+        VStack(spacing: 4) {
+            if UIImage(named: "DeezerLogo") != nil {
+                Image("DeezerLogo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 24)
+                    .accessibilityHidden(true)
+            }
+            Text(AppStrings.Splash.poweredByDeezer)
+                .font(.caption2)
+                .foregroundStyle(.white)
+        }
     }
 }
 

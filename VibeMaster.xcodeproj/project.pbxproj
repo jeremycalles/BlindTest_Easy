@@ -51,7 +51,7 @@
 		F0020013 /* chime.wav */ = {isa = PBXFileReference; lastKnownFileType = file.wav; path = chime.wav; sourceTree = "<group>"; };
 		F0020014 /* chime_high.wav */ = {isa = PBXFileReference; lastKnownFileType = file.wav; path = chime_high.wav; sourceTree = "<group>"; };
 		F0020015 /* applause.wav */ = {isa = PBXFileReference; lastKnownFileType = file.wav; path = applause.wav; sourceTree = "<group>"; };
-		F0020016 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		F0020016 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		F0020017 /* AppStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStrings.swift; sourceTree = "<group>"; };
 		F0020018 /* EnvironmentKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentKeys.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */

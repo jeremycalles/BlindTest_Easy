@@ -6,6 +6,12 @@
     },
     "common.cancel" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16,6 +22,12 @@
     },
     "common.retry" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retry"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -26,6 +38,12 @@
     },
     "dashboard.add_favorites_hint" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add playlists to favorites to find them here."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -36,6 +54,12 @@
     },
     "dashboard.deezer_accessibility_hint" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens the Deezer website"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -46,6 +70,12 @@
     },
     "dashboard.home" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a playlist"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -56,6 +86,12 @@
     },
     "dashboard.my_blind_tests" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My Blind Tests"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -66,6 +102,12 @@
     },
     "dashboard.no_results" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No results"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -76,6 +118,12 @@
     },
     "dashboard.results" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Results"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -86,6 +134,12 @@
     },
     "dashboard.search_playlists_prompt" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search playlists"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -96,6 +150,12 @@
     },
     "dashboard.top_playlists" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top playlists"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -106,6 +166,12 @@
     },
     "dashboard.track_count" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d tracks"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -116,6 +182,12 @@
     },
     "error.load_playlists" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to load playlists. Check your connection."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -126,6 +198,12 @@
     },
     "error.load_results" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to load results."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -136,6 +214,12 @@
     },
     "error.load_tracks" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to load tracks."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -146,6 +230,12 @@
     },
     "error.quota_exceeded" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quota exceeded. Try again later."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -156,6 +246,12 @@
     },
     "game.finish" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Results"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -166,6 +262,12 @@
     },
     "game.next" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -176,6 +278,12 @@
     },
     "game.next_track_hint" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skip to the next track"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -186,6 +294,12 @@
     },
     "game.next_track_label" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next track"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -196,6 +310,12 @@
     },
     "game.pause" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -206,6 +326,12 @@
     },
     "game.play" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -216,6 +342,12 @@
     },
     "game.play_pause_hint" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause or resume the music clip"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -226,6 +358,12 @@
     },
     "game.player_tile_hint" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Double-tap to add a point. Long press to remove a point."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -236,6 +374,12 @@
     },
     "game.player_tile_label" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Player %@, %d points"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -246,6 +390,12 @@
     },
     "game.stop_button" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop the game"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -256,6 +406,12 @@
     },
     "game.stop_hint" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows a confirmation to quit the current game"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -266,6 +422,12 @@
     },
     "game.stop_message" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The current game will be abandoned."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -276,6 +438,12 @@
     },
     "game.stop_title" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop the game?"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -286,6 +454,12 @@
     },
     "game.time_up" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TIME'S UP"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -296,6 +470,12 @@
     },
     "game.track_header" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TRACK %d / %d"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -306,6 +486,12 @@
     },
     "game.view_podium" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View leaderboard"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -316,6 +502,12 @@
     },
     "game.view_podium_hint" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows the podium and ends the game"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -326,6 +518,12 @@
     },
     "podium.epic_results" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EPIC RESULTS"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -336,6 +534,12 @@
     },
     "podium.new_game" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New game!"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -346,6 +550,12 @@
     },
     "podium.points_abbrev" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "pts"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -356,6 +566,12 @@
     },
     "podium.score_display" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d pts"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -366,6 +582,12 @@
     },
     "podium.subtitle" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "And the BlindTest Easy champion is..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -376,6 +598,12 @@
     },
     "setup.add_player" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a player"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -386,6 +614,12 @@
     },
     "setup.error_title" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -396,6 +630,12 @@
     },
     "setup.loading" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading…"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -406,6 +646,12 @@
     },
     "setup.mc_mode_section" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MC Mode"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -416,6 +662,12 @@
     },
     "setup.mc_plays_toggle" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MC plays"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -426,6 +678,12 @@
     },
     "setup.no_tracks" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No tracks"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -436,6 +694,12 @@
     },
     "setup.player_placeholder" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Player %d"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -446,6 +710,12 @@
     },
     "setup.players_section" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Players"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -456,6 +726,12 @@
     },
     "setup.start_game" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start the game"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -466,6 +742,12 @@
     },
     "setup.timer_seconds" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d s"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -476,6 +758,12 @@
     },
     "setup.timer_section" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer (seconds)"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -486,6 +774,12 @@
     },
     "setup.title" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your game"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -496,6 +790,12 @@
     },
     "setup.tracks_count_section" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Number of tracks"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -506,6 +806,12 @@
     },
     "setup.tracks_count_value" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d / %d"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -516,6 +822,12 @@
     },
     "splash.app_name" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BlindTest Easy"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -526,6 +838,12 @@
     },
     "splash.powered_by_deezer" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Powered by Deezer"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -536,10 +854,16 @@
     },
     "splash.start_button" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Let's go!"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Commencer la soirée"
+            "value" : "Allons y"
           }
         }
       }
