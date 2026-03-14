@@ -24,43 +24,46 @@ struct GameView: View {
         ))
     }
 
-    // Manual position for track header — change trackHeaderTop / trackHeaderLeading to move it.
-    // For center: use .frame(maxWidth: .infinity) on trackHeader and ZStack(alignment: .top).
-    private let trackHeaderTop: CGFloat = -90
-    private let trackHeaderLeading: CGFloat = 70
-    /// Fixed height for the track card so its size stays the same in all states.
-    private let trackCardHeight: CGFloat = 56
-    /// Y position of the track card (offset from top of game content). Change to move the card vertically.
-    private let trackCardTop: CGFloat = -50
-    /// Minimum vertical gap between the track card and the player grid. Keeps the layout balanced.
-    private let trackCardToGridGap: CGFloat = 12
+    private let spacing: CGFloat = 8
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
+        ZStack {
             backgroundLayer
             GeometryReader { geo in
-                let topReserved = max(0, trackCardTop + trackCardHeight) + trackCardToGridGap
-                let bottomReserved: CGFloat = 110
-                let gridHeight = max(60, geo.size.height - topReserved - bottomReserved - 12 * 2)
-                VStack(alignment: .leading, spacing: 12) {
-                    Color.clear.frame(height: topReserved)
+                let totalHeight = geo.size.height
+                let timerHeight: CGFloat = 30
+                let controlsHeight: CGFloat = 70
+                let chrome = timerHeight + controlsHeight + spacing * 4
+                let contentHeight = totalHeight - chrome
+
+                let rowCount = max((config.playerNames.count + 1) / 2, 1)
+                let horizontal = rowCount >= 4
+                let cardFraction: CGFloat = rowCount <= 1 ? 0.45 : (rowCount <= 2 ? 0.35 : 0.25)
+                let cardBudget = contentHeight * cardFraction
+                let coverSize: CGFloat = horizontal ? 56 : min(120, max(56, cardBudget - 50))
+                let cardHeight: CGFloat = horizontal ? 80 : (coverSize + 50 + 24)
+
+                let gridHeight = max(60, contentHeight - cardHeight)
+
+                VStack(spacing: spacing) {
+                    if let track = engine.currentTrack {
+                        trackCard(track, coverSize: coverSize, horizontal: horizontal)
+                            .frame(height: cardHeight)
+                    }
+
                     playerGrid(availableHeight: gridHeight)
                         .frame(height: gridHeight)
+
                     timerStrip
+                        .frame(height: timerHeight)
                     controlBar
+                        .frame(height: controlsHeight)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.horizontal)
             .padding(.top, 8)
             .padding(.bottom)
-            trackHeader
-                .padding(.top, trackHeaderTop)
-                .padding(.leading, trackHeaderLeading)
-            if let track = engine.currentTrack {
-                trackCard(track)
-                    .padding(.top, trackCardTop)
-            }
         }
         .safeAreaInset(edge: .top, spacing: 0) { Color.clear.frame(height: 0) }
         .navigationBarBackButtonHidden(true)
@@ -73,6 +76,9 @@ struct GameView: View {
                 }
                 .accessibilityLabel(AppStrings.Game.stopButton)
                 .accessibilityHint(AppStrings.Game.stopHint)
+            }
+            ToolbarItem(placement: .principal) {
+                trackHeader
             }
         }
         .confirmationDialog(AppStrings.Game.stopTitle, isPresented: $showStopGameConfirmation) {
@@ -122,38 +128,64 @@ struct GameView: View {
             .foregroundStyle(.secondary)
     }
 
-    private func trackCard(_ track: Track) -> some View {
-        HStack(spacing: 12) {
-            AsyncImage(url: URL(string: track.album.cover_medium)) { image in image.resizable() }
-                placeholder: { Color.gray.opacity(0.3) }
-                .frame(width: 56, height: 56)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-            VStack(alignment: .leading, spacing: 4) {
-                Text(track.title)
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                Text(track.artist.name)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-            }
-            Spacer()
+    @ViewBuilder
+    private func trackCard(_ track: Track, coverSize: CGFloat, horizontal: Bool) -> some View {
+        let cover = AsyncImage(url: URL(string: track.album.cover_medium)) { image in
+            image.resizable().scaledToFill()
+        } placeholder: {
+            Color.gray.opacity(0.3)
         }
-        .frame(height: trackCardHeight)
-        .padding(12)
-        .glassEffect(in: RoundedRectangle(cornerRadius: 12))
-        .overlay {
-            if config.mcPlaysMode && !engine.isRevealed {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.systemBackground).opacity(0.95))
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .glassEffect(in: RoundedRectangle(cornerRadius: 12))
+        .frame(width: coverSize, height: coverSize)
+        .clipShape(RoundedRectangle(cornerRadius: horizontal ? 8 : 12))
+
+        let cardContent: AnyView = horizontal
+            ? AnyView(
+                HStack(spacing: 12) {
+                    cover
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(track.title)
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                        Text(track.artist.name)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                    }
+                    Spacer()
+                }
+            )
+            : AnyView(
+                VStack(spacing: 8) {
+                    cover
+                    Text(track.title)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                    Text(track.artist.name)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                }
+                .frame(maxWidth: .infinity)
+            )
+
+        cardContent
+            .padding(12)
+            .glassEffect(in: RoundedRectangle(cornerRadius: horizontal ? 12 : 16))
+            .overlay {
+                if config.mcPlaysMode && !engine.isRevealed {
+                    RoundedRectangle(cornerRadius: horizontal ? 12 : 16)
+                        .fill(Color(.systemBackground).opacity(0.95))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .glassEffect(in: RoundedRectangle(cornerRadius: horizontal ? 12 : 16))
+                }
             }
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+            .clipShape(RoundedRectangle(cornerRadius: horizontal ? 12 : 16))
     }
 
     private func playerGrid(availableHeight: CGFloat) -> some View {
@@ -510,11 +542,29 @@ private extension GameView {
         let track = Track(id: 1, title: "Preview Track", preview: "", artist: artist, album: album)
         return GameConfig(tracks: [track], playerNames: ["Alice", "Bob"], timerSeconds: 15, mcPlaysMode: false)
     }
+
+    static var previewConfig8Players: GameConfig {
+        let artist = Artist(name: "Preview Artist", picture_medium: "")
+        let album = Album(cover_medium: "https://example.com/cover.jpg")
+        let track = Track(id: 1, title: "Preview Track", preview: "", artist: artist, album: album)
+        return GameConfig(
+            tracks: [track],
+            playerNames: ["Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Grace", "Hank"],
+            timerSeconds: 15,
+            mcPlaysMode: false
+        )
+    }
 }
 
 #Preview("GameView") {
     NavigationStack {
         GameView(config: GameView.previewConfig, path: .constant([]), audio: PreviewAudioPlayback())
+    }
+}
+
+#Preview("GameView 8 Players") {
+    NavigationStack {
+        GameView(config: GameView.previewConfig8Players, path: .constant([]), audio: PreviewAudioPlayback())
     }
 }
 
