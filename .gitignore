@@ -19,3 +19,9 @@ xcuserdata/
 
 # macOS
 .DS_Store
+
+# App Review / generated docs (attach to App Store Connect only)
+docs/*.pdf
+
+# Agent guidelines (local)
+Agents.md
