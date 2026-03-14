@@ -188,7 +188,7 @@ struct SetupView: View {
             Slider(value: $timerSeconds, in: 5...30, step: 1)
                 .tint(setupSliderGradient)
             HStack {
-                Text("5-30s")
+                Text("5s")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer()
@@ -211,7 +211,7 @@ struct SetupView: View {
                     .font(.headline)
                     .foregroundStyle(.primary)
                 Spacer()
-                Text("\(numberOfSongs)")
+                Text("\(numberOfSongs) / \(Int(maxSongs))")
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundStyle(.secondary)
@@ -226,7 +226,7 @@ struct SetupView: View {
             )
             .tint(setupSliderGradient)
             HStack {
-                Text("1–\(Int(maxSongs))")
+                Text("1")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer()
@@ -270,26 +270,14 @@ struct SetupView: View {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
+                .glassEffect(.regular.interactive(), in: .capsule)
+                .overlay(
+                    Capsule()
+                        .stroke(.white.opacity(0.25), lineWidth: 1)
+                )
         }
-        .background(
-            ZStack {
-                Capsule()
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color(red: 0.2, green: 0.75, blue: 0.8),
-                                Color(red: 0.15, green: 0.55, blue: 0.7)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                Capsule()
-                    .strokeBorder(Color.white.opacity(0.35), lineWidth: 1)
-            }
-        )
-        .clipShape(Capsule())
-        .shadow(color: Color(red: 0.2, green: 0.7, blue: 0.75).opacity(0.5), radius: 12, y: 4)
+        .buttonStyle(.plain)
+        .shadow(color: .black.opacity(0.15), radius: 12, y: 4)
         .opacity(canStart ? 1 : 0.5)
         .disabled(!canStart)
         .padding(.top, 8)
