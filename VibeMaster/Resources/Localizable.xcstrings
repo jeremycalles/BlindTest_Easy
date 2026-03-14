@@ -410,6 +410,38 @@
         }
       }
     },
+    "game.points_this_song" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%d"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%d"
+          }
+        }
+      }
+    },
+    "game.points_this_song_accessibility" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d points this song"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d points cette chanson"
+          }
+        }
+      }
+    },
     "game.stop_button" : {
       "localizations" : {
         "en" : {

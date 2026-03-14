@@ -98,5 +98,11 @@ enum AppStrings {
             String(format: String(localized: "game.player_tile_label"), name, score)
         }
         static let playerTileHint = String(localized: "game.player_tile_hint")
+        static func pointsThisSong(_ count: Int) -> String {
+            String(format: String(localized: "game.points_this_song"), count)
+        }
+        static func pointsThisSongAccessibility(_ count: Int) -> String {
+            String(format: String(localized: "game.points_this_song_accessibility"), count)
+        }
     }
 }

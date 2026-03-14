@@ -18,6 +18,7 @@ public final class GameEngine: ObservableObject {
 
     @Published public private(set) var currentTrackIndex = 0
     @Published public private(set) var scores: [String: Int] = [:]
+    @Published public private(set) var pointsThisSong: [String: Int] = [:]
     @Published public private(set) var isPlaying = false
     @Published public private(set) var isRevealed = false
     @Published public private(set) var timeRemaining = 0
@@ -33,7 +34,10 @@ public final class GameEngine: ObservableObject {
         self.audio = audio
         self.onTimerEnd = onTimerEnd
         self.onTimerTick = onTimerTick
-        config.playerNames.forEach { scores[$0] = 0 }
+        config.playerNames.forEach {
+            scores[$0] = 0
+            pointsThisSong[$0] = 0
+        }
         type(of: audio).configureSession()
     }
 
@@ -43,6 +47,7 @@ public final class GameEngine: ObservableObject {
         guard !track.preview.isEmpty else { return }
         audio.load(url: track.preview)
         audio.play()
+        config.playerNames.forEach { pointsThisSong[$0] = 0 }
         isRevealed = false
         roundEnded = false
         timeRemaining = config.timerSeconds
@@ -98,10 +103,12 @@ public final class GameEngine: ObservableObject {
 
     public func addPoint(playerName: String) {
         scores[playerName, default: 0] += 1
+        pointsThisSong[playerName, default: 0] += 1
     }
 
     public func addPoints(_ value: Int, playerName: String) {
         scores[playerName, default: 0] += value
+        pointsThisSong[playerName, default: 0] += value
     }
 
     public func nextTrack() {

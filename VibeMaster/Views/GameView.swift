@@ -166,6 +166,7 @@ struct GameView: View {
                 PlayerTile(
                     name: name,
                     score: engine.scores[name] ?? 0,
+                    pointsThisSong: engine.pointsThisSong[name] ?? 0,
                     color: playerColor(for: name),
                     iconName: playerIcon(for: name),
                     rowHeight: rowHeight,
@@ -392,6 +393,7 @@ struct ConfettiParticle: View {
 struct PlayerTile: View {
     let name: String
     let score: Int
+    var pointsThisSong: Int = 0
     let color: Color
     let iconName: String
     var rowHeight: CGFloat = 140
@@ -424,10 +426,22 @@ struct PlayerTile: View {
 
                     Spacer()
 
-                    Text("\(score)")
-                        .font(.system(size: 36, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
-                        .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text("\(score)")
+                            .font(.system(size: 36, weight: .bold, design: .rounded))
+                            .foregroundStyle(.white)
+                            .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
+
+                        if pointsThisSong > 0 {
+                            Text(AppStrings.Game.pointsThisSong(pointsThisSong))
+                                .font(.system(size: 14, weight: .semibold, design: .rounded))
+                                .foregroundStyle(color)
+                                .shadow(color: color.opacity(0.6), radius: 4)
+                                .transition(.scale.combined(with: .opacity))
+                                .accessibilityLabel(AppStrings.Game.pointsThisSongAccessibility(pointsThisSong))
+                        }
+                    }
+                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: pointsThisSong)
                 }
 
                 Spacer()
@@ -513,6 +527,7 @@ private extension GameView {
     PlayerTile(
         name: "Alice",
         score: 3,
+        pointsThisSong: 2,
         color: .blue,
         iconName: "flame.fill",
         onTap: {},

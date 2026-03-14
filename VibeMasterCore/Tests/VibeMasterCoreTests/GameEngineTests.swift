@@ -168,6 +168,77 @@ final class GameEngineTests: XCTestCase {
         XCTAssertEqual(engine.currentTrackIndex, 2)
     }
 
+    func testPointsThisSongInitializedToZero() async {
+        let config = makeConfig()
+        let mock = MockAudioPlayback()
+        let engine = GameEngine(
+            config: config,
+            audio: mock,
+            onTimerEnd: {},
+            onTimerTick: { _ in }
+        )
+        XCTAssertEqual(engine.pointsThisSong["Alice"], 0)
+        XCTAssertEqual(engine.pointsThisSong["Bob"], 0)
+    }
+
+    func testAddPointIncrementsPointsThisSong() async {
+        let config = makeConfig()
+        let mock = MockAudioPlayback()
+        let engine = GameEngine(
+            config: config,
+            audio: mock,
+            onTimerEnd: {},
+            onTimerTick: { _ in }
+        )
+        engine.addPoint(playerName: "Alice")
+        XCTAssertEqual(engine.pointsThisSong["Alice"], 1)
+        engine.addPoint(playerName: "Alice")
+        XCTAssertEqual(engine.pointsThisSong["Alice"], 2)
+        XCTAssertEqual(engine.pointsThisSong["Bob"], 0)
+    }
+
+    func testAddPointsUpdatesPointsThisSong() async {
+        let config = makeConfig()
+        let mock = MockAudioPlayback()
+        let engine = GameEngine(
+            config: config,
+            audio: mock,
+            onTimerEnd: {},
+            onTimerTick: { _ in }
+        )
+        engine.addPoints(3, playerName: "Alice")
+        XCTAssertEqual(engine.pointsThisSong["Alice"], 3)
+        engine.addPoints(-1, playerName: "Alice")
+        XCTAssertEqual(engine.pointsThisSong["Alice"], 2)
+    }
+
+    func testPointsThisSongResetsOnNextTrack() async {
+        let config = makeConfig(trackCount: 3)
+        let mock = MockAudioPlayback()
+        let engine = GameEngine(
+            config: config,
+            audio: mock,
+            onTimerEnd: {},
+            onTimerTick: { _ in }
+        )
+        engine.startRound()
+        engine.addPoint(playerName: "Alice")
+        engine.addPoint(playerName: "Alice")
+        engine.addPoint(playerName: "Bob")
+        XCTAssertEqual(engine.pointsThisSong["Alice"], 2)
+        XCTAssertEqual(engine.pointsThisSong["Bob"], 1)
+        XCTAssertEqual(engine.scores["Alice"], 2)
+        XCTAssertEqual(engine.scores["Bob"], 1)
+
+        engine.reveal()
+        engine.nextTrack()
+
+        XCTAssertEqual(engine.pointsThisSong["Alice"], 0)
+        XCTAssertEqual(engine.pointsThisSong["Bob"], 0)
+        XCTAssertEqual(engine.scores["Alice"], 2, "Total scores should persist across songs")
+        XCTAssertEqual(engine.scores["Bob"], 1, "Total scores should persist across songs")
+    }
+
     func testCurrentTrackReturnsNilWhenIndexOutOfBounds() async {
         let config = makeConfig(trackCount: 1)
         let mock = MockAudioPlayback()
