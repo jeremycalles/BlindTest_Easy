@@ -1,7 +1,19 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+    "" : {
+
+    },
     "%lld" : {
+
+    },
+    "1–%lld" : {
+
+    },
+    "5-30s" : {
+
+    },
+    "30s" : {
 
     },
     "common.cancel" : {
@@ -612,6 +624,22 @@
         }
       }
     },
+    "setup.add_player_button" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add +"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter +"
+          }
+        }
+      }
+    },
     "setup.error_title" : {
       "localizations" : {
         "en" : {
@@ -656,6 +684,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mode MC"
+          }
+        }
+      }
+    },
+    "setup.mc_mode_subtitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mode toggle"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "interrupteur mode"
           }
         }
       }

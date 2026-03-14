@@ -36,6 +36,7 @@ enum AppStrings {
             String(format: String(localized: "setup.player_placeholder"), index)
         }
         static let addPlayer = String(localized: "setup.add_player")
+        static let addPlayerButton = String(localized: "setup.add_player_button")
         static let timerSection = String(localized: "setup.timer_section")
         static func timerSeconds(_ seconds: Int) -> String {
             String(format: String(localized: "setup.timer_seconds"), seconds)
@@ -45,6 +46,7 @@ enum AppStrings {
             String(format: String(localized: "setup.tracks_count_value"), current, total)
         }
         static let mcModeSection = String(localized: "setup.mc_mode_section")
+        static let mcModeSubtitle = String(localized: "setup.mc_mode_subtitle")
         static let mcPlaysToggle = String(localized: "setup.mc_plays_toggle")
         static let startGame = String(localized: "setup.start_game")
     }

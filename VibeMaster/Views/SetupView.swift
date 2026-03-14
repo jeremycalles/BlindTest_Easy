@@ -52,18 +52,17 @@ struct SetupView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                formContent
+                ZStack {
+                    setupBackground
+                    formContent
+                }
             }
         }
-        .navigationTitle(AppStrings.Setup.title)
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            if onCancel != nil {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(AppStrings.Common.cancel) {
-                        onCancel?()
-                    }
-                }
+            ToolbarItem(placement: .topBarLeading) {
+                Text(AppStrings.Setup.title)
+                    .font(.headline)
             }
         }
         .onAppear {
@@ -91,69 +90,209 @@ struct SetupView: View {
         }
     }
 
+    private var setupBackground: some View {
+        LinearGradient(
+            colors: [
+                Color(red: 0.08, green: 0.08, blue: 0.14),
+                Color(red: 0.05, green: 0.05, blue: 0.10),
+                Color(red: 0.02, green: 0.02, blue: 0.06)
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        .ignoresSafeArea()
+    }
+
+    private var setupSliderGradient: LinearGradient {
+        LinearGradient(
+            colors: [
+                Color(red: 0.4, green: 0.7, blue: 1.0),
+                Color(red: 0.5, green: 0.35, blue: 0.9)
+            ],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+    }
+
     @ViewBuilder private var formContent: some View {
-        List {
-            Section(AppStrings.Setup.playersSection) {
-                ForEach(Array(playerNames.enumerated()), id: \.offset) { index, name in
-                    HStack {
-                        TextField(AppStrings.Setup.playerPlaceholder(index + 1), text: $playerNames[index])
-                            .textInputAutocapitalization(.words)
-                            .focused($focusedPlayerIndex, equals: index)
-                        if playerNames.count > 2 {
-                            Button(role: .destructive) {
-                                playerNames.remove(at: index)
-                            } label: {
-                                Image(systemName: "minus.circle")
-                            }
+        ScrollView {
+            VStack(spacing: 20) {
+                playersCard
+                timerCard
+                if !tracks.isEmpty { songsCountCard }
+                mcPlaysCard
+                startGameButton
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 32)
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) { Color.clear.frame(height: 56) }
+        .preferredColorScheme(.dark)
+    }
+
+    private var playersCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(AppStrings.Setup.playersSection)
+                .font(.headline)
+                .foregroundStyle(.primary)
+
+            ForEach(Array(playerNames.enumerated()), id: \.offset) { index, _ in
+                HStack(spacing: 8) {
+                    TextField(AppStrings.Setup.playerPlaceholder(index + 1), text: $playerNames[index])
+                        .textInputAutocapitalization(.words)
+                        .focused($focusedPlayerIndex, equals: index)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        .background(Color.white.opacity(0.08))
+                        .clipShape(Capsule())
+                    if playerNames.count > 2 {
+                        Button(role: .destructive) {
+                            playerNames.remove(at: index)
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .font(.title3)
+                                .foregroundStyle(.red.opacity(0.9))
                         }
                     }
                 }
-                Button {
-                    playerNames.append("")
-                } label: {
-                    Label(AppStrings.Setup.addPlayer, systemImage: "plus.circle")
-                }
             }
-            Section(AppStrings.Setup.timerSection) {
-                HStack {
-                    Text(AppStrings.Setup.timerSeconds(Int(timerSeconds)))
-                        .fontWeight(.medium)
-                    Slider(value: $timerSeconds, in: 5...30, step: 1)
-                }
+
+            Button {
+                playerNames.append("")
+            } label: {
+                Text(AppStrings.Setup.addPlayerButton)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
             }
-            if !tracks.isEmpty {
-                Section(AppStrings.Setup.tracksCountSection) {
-                    HStack {
-                        Text(AppStrings.Setup.tracksCountValue(current: numberOfSongs, total: tracks.count))
-                            .fontWeight(.medium)
-                        Slider(
-                            value: Binding(
-                                get: { Double(numberOfSongs) },
-                                set: { numberOfSongs = Int($0.rounded()) }
-                            ),
-                            in: 1...Double(max(1, tracks.count)),
-                            step: 1
-                        )
-                    }
-                }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 10)
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.15), radius: 12, y: 4)
+    }
+
+    private var timerCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text(AppStrings.Setup.timerSection)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                Spacer()
+                Text(AppStrings.Setup.timerSeconds(Int(timerSeconds)))
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.secondary)
             }
-            Section(AppStrings.Setup.mcModeSection) {
-                Toggle(AppStrings.Setup.mcPlaysToggle, isOn: $mcPlaysMode)
-            }
-            Section {
-                Button(AppStrings.Setup.startGame) {
-                    startGame()
-                }
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .disabled(!canStart)
+            Slider(value: $timerSeconds, in: 5...30, step: 1)
+                .tint(setupSliderGradient)
+            HStack {
+                Text("5-30s")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text("30s")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         }
-        .listStyle(.insetGrouped)
-        .scrollContentBackground(.hidden)
-        .safeAreaInset(edge: .bottom, spacing: 0) { Color.clear.frame(height: 56) }
-        .glassEffect(in: Rectangle())
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.15), radius: 12, y: 4)
+    }
+
+    private var songsCountCard: some View {
+        let maxSongs = Double(max(1, tracks.count))
+        return VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text(AppStrings.Setup.tracksCountSection)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                Spacer()
+                Text("\(numberOfSongs)")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.secondary)
+            }
+            Slider(
+                value: Binding(
+                    get: { Double(numberOfSongs) },
+                    set: { numberOfSongs = Int($0.rounded()) }
+                ),
+                in: 1...maxSongs,
+                step: 1
+            )
+            .tint(setupSliderGradient)
+            HStack {
+                Text("1–\(Int(maxSongs))")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text("\(Int(maxSongs))")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.15), radius: 12, y: 4)
+    }
+
+    private var mcPlaysCard: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(AppStrings.Setup.mcPlaysToggle)
+                .font(.headline)
+                .foregroundStyle(.primary)
+            Text(AppStrings.Setup.mcModeSubtitle)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            HStack {
+                Spacer()
+                Toggle("", isOn: $mcPlaysMode)
+                    .labelsHidden()
+                    .tint(Color(red: 0.55, green: 0.35, blue: 0.95))
+            }
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.15), radius: 12, y: 4)
+    }
+
+    private var startGameButton: some View {
+        Button(action: startGame) {
+            Text(AppStrings.Setup.startGame)
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+        }
+        .background(
+            ZStack {
+                Capsule()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color(red: 0.2, green: 0.75, blue: 0.8),
+                                Color(red: 0.15, green: 0.55, blue: 0.7)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                Capsule()
+                    .strokeBorder(Color.white.opacity(0.35), lineWidth: 1)
+            }
+        )
+        .clipShape(Capsule())
+        .shadow(color: Color(red: 0.2, green: 0.7, blue: 0.75).opacity(0.5), radius: 12, y: 4)
+        .opacity(canStart ? 1 : 0.5)
+        .disabled(!canStart)
+        .padding(.top, 8)
     }
 
     private func startGame() {
