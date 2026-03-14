@@ -61,7 +61,7 @@ struct SetupView: View {
         .navigationTitle(AppStrings.Setup.title)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            let lastNames = LastGameState.loadPlayerNames()
+            let lastNames = Array(LastGameState.loadPlayerNames().prefix(8))
             if lastNames.count >= 2 {
                 playerNames = lastNames
             } else if !lastNames.isEmpty {
@@ -152,15 +152,17 @@ struct SetupView: View {
                 }
             }
 
-            Button {
-                playerNames.append("")
-            } label: {
-                Text(AppStrings.Setup.addPlayerButton)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
+            if playerNames.count < 8 {
+                Button {
+                    playerNames.append("")
+                } label: {
+                    Text(AppStrings.Setup.addPlayerButton)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 10)
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
