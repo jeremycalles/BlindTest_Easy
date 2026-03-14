@@ -17,6 +17,7 @@ struct VibeMasterApp: App {
         appearance.titleTextAttributes = [.font: titleFont]
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        _ = FavoritesManager.shared.load()
     }
 
     var body: some Scene {
